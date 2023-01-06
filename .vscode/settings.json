@@ -3,5 +3,11 @@
     "java.project.outputPath": "bin",
     "java.project.referencedLibraries": [
         "lib/**/*.jar"
-    ]
+    ],
+    "editor.autoClosingBrackets": "languageDefined",
+    "editor.autoClosingDelete": "auto",
+    "editor.autoClosingOvertype": "never",
+    "editor.autoSurround": "languageDefined",
+    "editor.inlayHints.enabled": "offUnlessPressed",
+    "editor.lightbulb.enabled": true
 }
