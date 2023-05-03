@@ -320,10 +320,17 @@ public class GUI {
 
     private void paintButton(BoardButton button, int imageType) {
         ImageIcon image;
-        
+        Image scaledImage;
+        Image placeholder;
+
         switch (imageType) {
             case 0:
-            image = new ImageIcon(boardImages[UNCLICKED]);
+            //placeholder = (boardImages[UNCLICKED]).clone();
+            ImageIcon imageIcon = new ImageIcon(boardImages[UNCLICKED]);
+            Image image1 = imageIcon.getImage();
+            Image image2 = image1.getScaledInstance(10, 10, java.awt.Image.SCALE_SMOOTH);
+            //scaledImage = boardImages[UNCLICKED].getScaledInstance(10,10, java.awt.Image.SCALE_SMOOTH);
+            image = new ImageIcon(image2);
             button.setIcon(image);
             break;
 
@@ -479,7 +486,7 @@ public class GUI {
     private void readInImages(){
 
         //read in images for the board
-        boardImages = new BufferedImage[9];
+        boardImages = new Image[9];
         String[] boardAssests = {""};
 
         try{
@@ -497,7 +504,7 @@ public class GUI {
         }
 
         //read in images for the numbers
-        numberImages = new BufferedImage[11];
+        numberImages = new Image[11];
         String[] numberAssests = {""};
         try{
             numberAssests = (new File("src/Assests/Information/Time")).list();
@@ -514,7 +521,7 @@ public class GUI {
         }
 
         //read in images for the face
-        faceImages = new BufferedImage[4];
+        faceImages = new Image[4];
         String[] faceAssests = {""};
         try{
             faceAssests = (new File("src/Assests/Information/Face")).list();
