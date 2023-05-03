@@ -21,9 +21,11 @@ public class GUI {
     private JMenu menu;
     private JMenuItem menuItem;
 
+    /*
     private JTextArea output;
     private JScrollPane scrollPane;
     private String newline = "\n";
+    */
 
     private boolean started = false;
 
@@ -43,6 +45,11 @@ public class GUI {
 
     private JPanel gameInformation = new JPanel();
     private JPanel board = new JPanel();
+    private JPanel leftside = new JPanel();
+    private JPanel rightside = new JPanel();
+
+    private GridLayout layout;
+    private BorderLayout borderLayout;
 
     //private customListener action = new customListener();
     private optionListener optionButton = new optionListener();
@@ -102,24 +109,25 @@ public class GUI {
         frame.setSize(new Dimension(1500,1500));
         //frame.setMinimumSize(new Dimension(19*gridwidth,20*gridheight+500));
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setResizable(false);
+        //frame.setResizable(false);
 
         createMenu();
-        GridLayout layout = new GridLayout(gridheight, gridwidth,0,0);
-        board.setLayout(layout);
-        board.setPreferredSize(new Dimension(20*gridwidth,24*gridheight));
-        board.setMinimumSize(board.getPreferredSize());
-        board.setMaximumSize(board.getPreferredSize());
-        board.setSize(board.getPreferredSize());
-        
+                
         newBoard();
         createGamePanel();
 
 
         Container contentPane = frame.getContentPane();
         
+        borderLayout = new BorderLayout();
+        contentPane.setLayout(borderLayout);
+
+        
         contentPane.add(board,BorderLayout.CENTER);
         contentPane.add(gameInformation,BorderLayout.SOUTH);
+        contentPane.add(rightside, BorderLayout.LINE_END);
+        contentPane.add(leftside, BorderLayout.LINE_START);
+
         //contentPane.add(createContentPane(),BorderLayout.NORTH);
 
         frame.pack();
@@ -252,6 +260,7 @@ public class GUI {
         return classString.substring(dotIndex+1);
     }
 
+    /*
     public Container createContentPane() {
         //Create the content-pane-to-be.
         JPanel contentPane = new JPanel(new BorderLayout());
@@ -259,6 +268,7 @@ public class GUI {
         contentPane.setSize(new Dimension(2,100));
         
 
+        
         //Create a scrolled text area.
         output = new JTextArea(5, 10);
         output.setEditable(false);
@@ -266,32 +276,41 @@ public class GUI {
 
         //Add the text area to the content pane.
         contentPane.add(scrollPane, BorderLayout.CENTER);
+        
 
         return contentPane;
-    }
+    }*/
 
 
 
     private void newBoard() {
 
+        layout = new GridLayout(gridwidth, gridheight,0,0);
+        board.setLayout(layout);
+        board.setPreferredSize(new Dimension(20*gridwidth,20*gridheight));
+        board.setMinimumSize(board.getPreferredSize());
+        board.setMaximumSize(board.getPreferredSize());
+        board.setSize(board.getPreferredSize());
+        
+
         board.removeAll();
         board.repaint();
 
-        buttonsArray = new BoardButton[gridheight][gridwidth];
+        buttonsArray = new BoardButton[gridwidth][gridheight];
 
-        for (int y = 0; y< gridheight; y++) {
-            for (int x = 0; x<gridwidth; x++) {
+        for (int x = 0; x< gridwidth; x++) {
+            for (int y = 0; y<gridheight; y++) {
 
-                buttonsArray[y][x] = null;
-                buttonsArray[y][x] = new BoardButton(this,(y*gridwidth+x));
+                buttonsArray[x][y] = null;
+                buttonsArray[x][y] = new BoardButton(this,(y*gridwidth+x));
 
                 //changes the board to a blank image
-                paintButton(buttonsArray[y][x],UNCLICKED);
-                addPressedButtonAnimation(buttonsArray[y][x]);
-                buttonsArray[y][x].setName(String.valueOf(y*gridwidth+x)); //Stores the position of the button in the array               
-                buttonsArray[y][x].addMouseListener(gameButton);
+                paintButton(buttonsArray[x][y],UNCLICKED);
+                addPressedButtonAnimation(buttonsArray[x][y]);
+                buttonsArray[x][y].setName(String.valueOf(y*gridwidth+x)); //Stores the position of the button in the array               
+                buttonsArray[x][y].addMouseListener(gameButton);
 
-                board.add(buttonsArray[y][x]);
+                board.add(buttonsArray[x][y]);
 
                 frame.setVisible(true);
             }
@@ -420,18 +439,18 @@ public class GUI {
     }
 
     public void removeActionListener(int x, int y) {
-        buttonsArray[y][x].removeMouseListener(gameButton);
+        buttonsArray[x][y].removeMouseListener(gameButton);
     }
 
     public void updatePaintedSquare(int x, int y, int newFace) {
-        BoardButton button = buttonsArray[y][x];
+        BoardButton button = buttonsArray[x][y];
         
         paintButton(button, newFace);
         numberBoard(button, CLEAR);
     }
 
     public void updateNumberedSquare(int x, int y, int numberOfBombs) {
-        BoardButton button = buttonsArray[y][x];
+        BoardButton button = buttonsArray[x][y];
         paintButton(button, CLEAR);
         numberBoard(button, numberOfBombs);
     }
@@ -645,7 +664,7 @@ public class GUI {
             heightModel = new SpinnerNumberModel(getGridheight(), MINGRIDHEIGHT, MAXGRIDHEIGHT,1);
             heightSpinner = new JSpinner(heightModel);
 
-            widthModel = new SpinnerNumberModel(getGridheight(), MINGRIDWIDTH, MAXGRIDWIDTH,1);
+            widthModel = new SpinnerNumberModel(getGridwidth(), MINGRIDWIDTH, MAXGRIDWIDTH,1);
             widthSpinner = new JSpinner(widthModel);
 
             options.add(new JLabel("Height"));
@@ -692,10 +711,8 @@ public class GUI {
             apply.addActionListener(new ActionListener(){
                 public void actionPerformed(ActionEvent e){
 
-                    //made a mistake somewhere where I confused my height and width, 
-                    // but don't want to go throught the whole program changing everything
-                    int newHeight = Integer.valueOf(widthSpinner.getValue().toString());
-                    int newWidth = Integer.valueOf(heightSpinner.getValue().toString());
+                    int newHeight = Integer.valueOf(heightSpinner.getValue().toString());
+                    int newWidth = Integer.valueOf(widthSpinner.getValue().toString());
                     int newBombValue = Integer.valueOf(bombSpinner.getValue().toString());
 
                     setBombs(newBombValue);
