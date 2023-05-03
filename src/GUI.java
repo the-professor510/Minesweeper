@@ -1,5 +1,8 @@
 import java.awt.*;
 import javax.swing.*;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
+
 import java.awt.event.*;
 
 import java.awt.image.BufferedImage;
@@ -15,7 +18,7 @@ public class GUI {
     private JFrame frame;
 
     private JMenuBar menuBar;
-    private JMenu menu, submenu;
+    private JMenu menu;
     private JMenuItem menuItem;
 
     private JTextArea output;
@@ -26,16 +29,23 @@ public class GUI {
 
     private BoardButton[][] buttonsArray;
 
-    private int gridwidth = 10;
-    private int gridheight = 10;
+    private int gridwidth = 15;
+    private int gridheight = 15;
 
-    private int numBombs = 5;
-    private int flags = 5;
+    private final int MINGRIDHEIGHT = 10;
+    private final int MAXGRIDHEIGHT = 1000;
+
+    private final int MINGRIDWIDTH = 10;
+    private final int MAXGRIDWIDTH = 1000;
+
+    private int numBombs = 25;
+    private int flags = 9;
 
     private JPanel gameInformation = new JPanel();
     private JPanel board = new JPanel();
 
     private customListener action = new customListener();
+    private optionListener optionButton = new optionListener();
     private gameListener gameButton = new gameListener();
 
     private Image[] boardImages;
@@ -110,7 +120,7 @@ public class GUI {
         
         contentPane.add(board,BorderLayout.CENTER);
         contentPane.add(gameInformation,BorderLayout.SOUTH);
-        contentPane.add(createContentPane(),BorderLayout.NORTH);
+        //contentPane.add(createContentPane(),BorderLayout.NORTH);
 
         frame.pack();
         
@@ -131,21 +141,33 @@ public class GUI {
 
         //New Game
         //Option
-        //Change Appearance
         //Exit
         menuItem = new JMenuItem("New Game");
-        menuItem.addActionListener(action);
+        menuItem.addActionListener(new ActionListener(){
+            public void actionPerformed(ActionEvent e) {
+                //The timer and board are reset to prepare a new game
+                endTime();
+                resetGame();
+            }
+        });
         menu.add(menuItem);
         menu.addSeparator();
 
         menuItem = new JMenuItem("Options");
-        menuItem.addActionListener(action);
+        menuItem.addActionListener(optionButton);
         menu.add(menuItem);
 
-        menuItem = new JMenuItem("Appearance");
-        menuItem.addActionListener(action);
+        menuItem = new JMenuItem("Help");
+        menuItem.addActionListener(new ActionListener(){
+            public void actionPerformed(ActionEvent e) {
+                // gives a link to the wikipedia for minesweeper
+                JOptionPane.showConfirmDialog(null, "This is a java implementaion of the classic computer game Minesweeper. \n"
+                                                    +"The aim of the game is to clear the board without clicking on any mines. \n" 
+                                                    +"A full explanation of the rules of minesweeper can be found when following \n"
+                                                    +"the following link: https://mathworld.wolfram.com/Minesweeper.html","Help", JOptionPane.CLOSED_OPTION);
+            }
+        });
         menu.add(menuItem);
-        menu.addSeparator();
 
         menuItem = new JMenuItem("Exit");
         menuItem.addActionListener(new ActionListener(){
@@ -155,9 +177,6 @@ public class GUI {
             }
         });
         menu.add(menuItem);
-
-        menu = new JMenu("Help");
-        menuBar.add(menu);
     }
 
     private void createGamePanel() {
@@ -559,6 +578,20 @@ public class GUI {
         }
     }
 
+    private int minNumberBombs(int height, int width) {
+        //5% of the board is bombs
+        int numSquares = height*width;
+        int minBombs = (int)(0.05*numSquares);
+        return minBombs;
+    }
+
+    private int maxNumberBombs(int height, int width) {
+        //65% of the board is bombs
+        int numSquares = height*width;
+        int maxBombs = (int)(0.65*numSquares);
+        return maxBombs;
+    }
+
     private void updateface(int facetype){
         face.setIcon(new ImageIcon(faceImages[facetype]));
     }
@@ -566,9 +599,6 @@ public class GUI {
     public Engine getEngine() {
         return engine;
     }
-
-
-
 
 
 
@@ -585,6 +615,136 @@ public class GUI {
                         + " (an instance of " + getClassName(source) + ")";
             output.append(s + newline);
             output.setCaretPosition(output.getDocument().getLength());
+        }
+    }
+
+    class optionListener implements ActionListener {
+        private SpinnerNumberModel bombModel;
+        private JSpinner bombSpinner;
+
+        private SpinnerNumberModel heightModel;
+        private JSpinner heightSpinner;
+
+        private SpinnerNumberModel widthModel;
+        private JSpinner widthSpinner;
+
+        private JDialog options;
+
+        private JButton apply;
+        private JButton cancel;
+
+
+        public void actionPerformed(ActionEvent e) {
+
+            options = new JDialog(frame, "Options", Dialog.ModalityType.DOCUMENT_MODAL);
+
+            options.setSize(300, 200);
+            options.setLayout(new FlowLayout());
+
+
+            heightModel = new SpinnerNumberModel(getGridheight(), MINGRIDHEIGHT, MAXGRIDHEIGHT,1);
+            heightSpinner = new JSpinner(heightModel);
+
+            widthModel = new SpinnerNumberModel(getGridheight(), MINGRIDWIDTH, MAXGRIDWIDTH,1);
+            widthSpinner = new JSpinner(widthModel);
+
+            options.add(new JLabel("Height"));
+            options.add(heightSpinner);
+            options.add(new JLabel("Width"));
+            options.add(widthSpinner);
+
+            //number of bombs
+            bombModel = new SpinnerNumberModel(numBombs, minNumberBombs(getGridheight(),getGridwidth()), maxNumberBombs(getGridheight(),getGridwidth()),1);
+            bombSpinner = new JSpinner(bombModel);
+
+            options.add(new JLabel("Bombs"));
+            options.add(bombSpinner);
+            //buttons to apply settings and cancel to revert to what was already there
+
+            heightSpinner.addChangeListener(new ChangeListener() {
+                
+                public void stateChanged(ChangeEvent e) {
+
+                    Object value = widthSpinner.getValue();
+                    int width = Integer.valueOf(value.toString());
+
+                    value = heightSpinner.getValue();
+                    int height = Integer.valueOf(value.toString());
+
+                    updateBombLimits(height,width);
+                }
+            });
+            widthSpinner.addChangeListener(new ChangeListener() {
+                
+                public void stateChanged(ChangeEvent e) {
+
+                    Object value = widthSpinner.getValue();
+                    int width = Integer.valueOf(value.toString());
+
+                    value = heightSpinner.getValue();
+                    int height = Integer.valueOf(value.toString());
+
+                    updateBombLimits(height,width);
+                }
+            });
+
+            apply = new JButton("Apply");
+            apply.addActionListener(new ActionListener(){
+                public void actionPerformed(ActionEvent e){
+
+                    //made a mistake somewhere where I confused my height and width, 
+                    // but don't want to go throught the whole program changing everything
+                    int newHeight = Integer.valueOf(widthSpinner.getValue().toString());
+                    int newWidth = Integer.valueOf(heightSpinner.getValue().toString());
+                    int newBombValue = Integer.valueOf(bombSpinner.getValue().toString());
+
+                    setBombs(newBombValue);
+                    changeGridheight(newHeight);
+                    changeGridwidth(newWidth);
+
+                    resetTime();
+                    resetGame();
+                    options.dispose();
+                }
+            });
+            
+            options.add(apply);
+
+            cancel = new JButton("Cancel");
+            cancel.addActionListener(new ActionListener(){
+                public void actionPerformed(ActionEvent e){
+                    resetTime();
+                    resetGame();
+                    options.dispose();
+                }
+            });
+
+            options.add(cancel);
+
+
+            options.pack();
+            options.setVisible(true);
+        }
+        
+        public void updateBombLimits(int height, int width){
+
+            int minNum = minNumberBombs(height, width);
+            int maxNum = maxNumberBombs(height, width);
+
+            bombModel.setMinimum(minNum);
+            bombModel.setMaximum(maxNum);
+
+            int bombvalue = Integer.valueOf(bombSpinner.getValue().toString());
+
+            if(bombvalue<minNum){
+                bombModel.setValue(minNum);
+            } else if (bombvalue>maxNum) {
+                bombModel.setValue(maxNum);
+            }
+
+            bombSpinner = new JSpinner(bombModel);
+            options.pack();
+
         }
     }
 
