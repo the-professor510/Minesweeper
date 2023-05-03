@@ -29,7 +29,7 @@ public class Engine {
     public void initialiseBoard(int position){
         int totalBombsPlaced = 0;
         int randint;
-        System.out.println(numBombs);
+        //System.out.println(numBombs);
 
         while (totalBombsPlaced < numBombs) {
             
@@ -42,9 +42,9 @@ public class Engine {
                 if (!(square[y][x].getIsBomb())) {
                     square[y][x].updateIsBomb(true);
                     totalBombsPlaced ++;
-                    System.out.println("");
-                    System.out.println(y);
-                    System.out.println(x);
+                    //System.out.println("");
+                    //System.out.println(y);
+                    //System.out.println(x);
                 }
 
             }
@@ -312,10 +312,10 @@ public class Engine {
     public boolean checkWin() {
         boolean won = true;
 
-        System.out.println("\b");
+        //System.out.println("\b");
 
         for( int y=0; y<height; y++) {
-            System.out.println("");
+            //System.out.println("");
             for (int x = 0; x<width; x++) {
                 //if there is a square that is not a bomb and has not been revealled then the game is not over
                 //System.out.println(square[y][x].getIsBomb());

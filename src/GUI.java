@@ -44,7 +44,7 @@ public class GUI {
     private JPanel gameInformation = new JPanel();
     private JPanel board = new JPanel();
 
-    private customListener action = new customListener();
+    //private customListener action = new customListener();
     private optionListener optionButton = new optionListener();
     private gameListener gameButton = new gameListener();
 
@@ -605,7 +605,7 @@ public class GUI {
 
 
 
-
+    /*
     class customListener implements ActionListener {
         public void actionPerformed(ActionEvent e) {
             JMenuItem source = (JMenuItem)(e.getSource());
@@ -616,7 +616,7 @@ public class GUI {
             output.append(s + newline);
             output.setCaretPosition(output.getDocument().getLength());
         }
-    }
+    }*/
 
     class optionListener implements ActionListener {
         private SpinnerNumberModel bombModel;
@@ -814,13 +814,13 @@ public class GUI {
                     gui.getEngine().clickSquare(source.getPosition());
                 }
 
-                gui.getEngine().clickSquare(source.getPosition());
+                //gui.getEngine().clickSquare(source.getPosition());
                 
 
 
 
 
-                if (source.getBlankFlagOrQuestion() == 0) {
+                /*if (source.getBlankFlagOrQuestion() == 0) {
                     source.changeClicked(true);
                     //removePressedButtonAnimation(source);
 
@@ -830,7 +830,7 @@ public class GUI {
                         + " (an instance of " + getClassName(source) + ")";
                     output.append(s + newline);
                     output.setCaretPosition(output.getDocument().getLength());
-                }
+                }*/
 
             
             } else if (SwingUtilities.isRightMouseButton(e)) {
@@ -839,36 +839,36 @@ public class GUI {
                 if (!(source.getClicked())){
                     switch (source.getBlankFlagOrQuestion()) {
                         case 0:
-                        if(flags!=0){
-                            source.updageBlankFlagOrQuestion(1);
-                            paintButton(source, FLAGGED);
-                            removePressedButtonAnimation(source);
-                            flags--;
-                            setBombs(flags);
-                            gui.getEngine().getSquare(source.getPosition()).updateFlagged(true);
-                        }
+                            if(flags!=0){
+                                source.updageBlankFlagOrQuestion(1);
+                                paintButton(source, FLAGGED);
+                                removePressedButtonAnimation(source);
+                                flags--;
+                                setBombs(flags);
+                                gui.getEngine().getSquare(source.getPosition()).updateFlagged(true);
+                            }
 
-                        break;
+                            break;
 
                         case 1:
-                        source.updageBlankFlagOrQuestion(2);
-                        paintButton(source, QUESTION);
-                        removePressedButtonAnimation(source);
-                        break;
+                            source.updageBlankFlagOrQuestion(2);
+                            paintButton(source, QUESTION);
+                            removePressedButtonAnimation(source);
+                            break;
 
                         case 2:
-                        source.updageBlankFlagOrQuestion(0);
-                        paintButton(source, UNCLICKED);
-                        addPressedButtonAnimation(source);
-                        flags++;
-                        setBombs(flags);
-                        gui.getEngine().getSquare(source.getPosition()).updateFlagged(false);
-                        break;
+                            source.updageBlankFlagOrQuestion(0);
+                            paintButton(source, UNCLICKED);
+                            addPressedButtonAnimation(source);
+                            flags++;
+                            setBombs(flags);
+                            gui.getEngine().getSquare(source.getPosition()).updateFlagged(false);
+                            break;
                     }
                 }
                 
                 
-                if (!(source.getClicked())){
+                /*if (!(source.getClicked())){
                     String s = "Action event detected."
                             + newline
                             + "    Event source1: " + source.getName()
@@ -883,11 +883,8 @@ public class GUI {
                             + " Already clicked";
                     output.append(s + newline);
                     output.setCaretPosition(output.getDocument().getLength());
-                }
+                }*/
             }
         }
     }
-
-
 }
-
