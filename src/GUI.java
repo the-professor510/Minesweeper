@@ -5,7 +5,6 @@ import javax.swing.event.ChangeListener;
 
 import java.awt.event.*;
 
-import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 
@@ -31,8 +30,8 @@ public class GUI {
 
     private BoardButton[][] buttonsArray;
 
-    private int gridwidth = 15;
-    private int gridheight = 15;
+    private int gridwidth = 10;
+    private int gridheight = 10;
 
     private final int MINGRIDHEIGHT = 10;
     private final int MAXGRIDHEIGHT = 1000;
@@ -40,7 +39,7 @@ public class GUI {
     private final int MINGRIDWIDTH = 10;
     private final int MAXGRIDWIDTH = 1000;
 
-    private int numBombs = 25;
+    private int numBombs = 10;
     private int flags = 9;
 
     private JPanel gameInformation = new JPanel();
@@ -58,6 +57,12 @@ public class GUI {
     private Image[] boardImages;
     private static Image[] numberImages;
     private Image[] faceImages;
+
+    private int ImageWidth = 20;
+    private int ImageHeight = 20;
+    private int topMargin = 10;
+    private int bottomMargin = 10;
+    private int sideMargins = 10;
 
     private static int watch = 0;
     private static Timer time;
@@ -101,21 +106,43 @@ public class GUI {
         engine = new Engine(this, gridwidth, gridheight, numBombs);
     }
 
+    private void resizeFrame() {
+        //int totalWidth;
+        int totalHeight;
+      
+        int gameInformationWidth = gameInformation.getWidth();
+        int gameInformationHeight = gameInformation.getHeight();
+        System.out.println(gameInformationHeight);
+        System.out.println(gameInformationWidth);
+
+        int boardWidth = board.getWidth() + 2*sideMargins;
+        int boardHeight = board.getHeight() + topMargin + bottomMargin;
+
+        totalHeight = gameInformationHeight + boardHeight;
+
+        if(boardWidth>gameInformationWidth){
+            frame.setSize(boardWidth, totalHeight);
+        } else {
+            frame.setSize(gameInformationWidth, totalHeight);
+        }
+
+        frame.pack();
+    }
+
     private void fillFrame() {
 
         frame = new JFrame();
 
         frame.setTitle("Minesweeper");
-        frame.setSize(new Dimension(1500,1500));
+        //frame.setSize(new Dimension(1500,1500));
         //frame.setMinimumSize(new Dimension(19*gridwidth,20*gridheight+500));
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        //frame.setResizable(false);
+        frame.setResizable(false);
 
         createMenu();
                 
         newBoard();
         createGamePanel();
-
 
         Container contentPane = frame.getContentPane();
         
@@ -130,6 +157,7 @@ public class GUI {
 
         //contentPane.add(createContentPane(),BorderLayout.NORTH);
 
+        resizeFrame();
         frame.pack();
         
 
@@ -191,12 +219,12 @@ public class GUI {
         FlowLayout layout = new FlowLayout();
         gameInformation.setLayout(layout);
 
-        //bombth = new JLabel("");
+        bombth = new JLabel("");
         bombh = new JLabel("");
         bombt = new JLabel("");
         bombo = new JLabel("");
 
-        //gameInformation.add(bombth);
+        gameInformation.add(bombth);
         gameInformation.add(bombh);
         gameInformation.add(bombt);
         gameInformation.add(bombo);
@@ -211,19 +239,19 @@ public class GUI {
                 resetGame();
             }
         });
-        face.setMargin(new Insets(0,0,0,0));
+        //face.setMargin(new Insets(0,0,0,0));
         //face.setBackground(new Color(0,0,0,0));
         face.setBorderPainted(false);
         gameInformation.add(face);
         gameInformation.add(Box.createHorizontalGlue());
         updateface(SMILE);
 
-        //timeth = new JLabel("");
+        timeth = new JLabel("");
         timeh = new JLabel("");
 		timet = new JLabel("");
 		timeo = new JLabel("");
 
-        //gameInformation.add(timeth);
+        gameInformation.add(timeth);
         gameInformation.add(timeh);
         gameInformation.add(timet);
         gameInformation.add(timeo);
@@ -285,9 +313,9 @@ public class GUI {
 
     private void newBoard() {
 
-        layout = new GridLayout(gridwidth, gridheight,0,0);
+        layout = new GridLayout(gridheight, gridwidth,0,0);
         board.setLayout(layout);
-        board.setPreferredSize(new Dimension(20*gridwidth,20*gridheight));
+        board.setPreferredSize(new Dimension((ImageWidth+1)*gridwidth,(ImageWidth+1)*gridheight));
         board.setMinimumSize(board.getPreferredSize());
         board.setMaximumSize(board.getPreferredSize());
         board.setSize(board.getPreferredSize());
@@ -306,6 +334,7 @@ public class GUI {
 
                 //changes the board to a blank image
                 paintButton(buttonsArray[x][y],UNCLICKED);
+
                 addPressedButtonAnimation(buttonsArray[x][y]);
                 buttonsArray[x][y].setName(String.valueOf(y*gridwidth+x)); //Stores the position of the button in the array               
                 buttonsArray[x][y].addMouseListener(gameButton);
@@ -318,60 +347,96 @@ public class GUI {
     }
 
 
+    public void blankBoard(){
+        System.out.println("");
+        for (int y = 0; y< gridheight; y++) {
+            String line = "";
+            for (int x = 0; x<gridwidth; x++) {
+
+                buttonsArray[x][y] = null;
+                buttonsArray[x][y] = new BoardButton(this,(y*gridwidth+x));
+                
+                Square square = engine.getSquare(y*gridwidth+x);
+                if(square.getIsBomb()){
+                    line += "B";
+                } else{
+                    //paintButton(buttonsArray[x][y], CLICKED);
+                    int numBombs = square.getNumBombsAround();
+                    //numberBoard(buttonsArray[x][y], numBombs);
+                    line+= numBombs;
+                }
+            }
+            System.out.println(line);
+        }
+        return;
+    }
+        
+
     private void paintButton(BoardButton button, int imageType) {
         ImageIcon image;
         Image scaledImage;
-        Image placeholder;
 
         switch (imageType) {
             case 0:
-            //placeholder = (boardImages[UNCLICKED]).clone();
-            ImageIcon imageIcon = new ImageIcon(boardImages[UNCLICKED]);
-            Image image1 = imageIcon.getImage();
-            Image image2 = image1.getScaledInstance(10, 10, java.awt.Image.SCALE_SMOOTH);
-            //scaledImage = boardImages[UNCLICKED].getScaledInstance(10,10, java.awt.Image.SCALE_SMOOTH);
-            image = new ImageIcon(image2);
-            button.setIcon(image);
+            scaledImage = boardImages[UNCLICKED].getScaledInstance(ImageWidth, ImageHeight, java.awt.Image.SCALE_SMOOTH);
+            image = new ImageIcon(scaledImage);
+            button.setIcon(image);             
             break;
 
             case 1:
-            image = new ImageIcon(boardImages[FLAGGED]);
+            //image = new ImageIcon(boardImages[FLAGGED]);
+            scaledImage = boardImages[FLAGGED].getScaledInstance(ImageWidth, ImageHeight, java.awt.Image.SCALE_SMOOTH);
+            image = new ImageIcon(scaledImage);
             button.setIcon(image);
             break;
 
             case 2:
-            image = new ImageIcon(boardImages[QUESTION]);
+            //image = new ImageIcon(boardImages[QUESTION]);
+            scaledImage = boardImages[QUESTION].getScaledInstance(ImageWidth, ImageHeight, java.awt.Image.SCALE_SMOOTH);
+            image = new ImageIcon(scaledImage);
             button.setIcon(image);
             break;
 
             case 3:
-            image = new ImageIcon(boardImages[CLICKED]);
+            //image = new ImageIcon(boardImages[CLICKED]);
+            scaledImage = boardImages[CLICKED].getScaledInstance(ImageWidth, ImageHeight, java.awt.Image.SCALE_SMOOTH);
+            image = new ImageIcon(scaledImage);
             button.setIcon(image);
             break;
 
             case 4:
-            image = new ImageIcon(boardImages[BOMB]);
+            //image = new ImageIcon(boardImages[BOMB]);
+            scaledImage = boardImages[BOMB].getScaledInstance(ImageWidth, ImageHeight, java.awt.Image.SCALE_SMOOTH);
+            image = new ImageIcon(scaledImage);
             button.setIcon(image);
             break;
 
             case 5:
-            image = new ImageIcon(boardImages[BOMBCLICKED]);
+            //image = new ImageIcon(boardImages[BOMBCLICKED]);
+            scaledImage = boardImages[BOMBCLICKED].getScaledInstance(ImageWidth, ImageHeight, java.awt.Image.SCALE_SMOOTH);
+            image = new ImageIcon(scaledImage);
             button.setIcon(image);
             break;
 
             case 6:
-            image = new ImageIcon(boardImages[BOMBFLAGGEDWRONG]);
+            //image = new ImageIcon(boardImages[BOMBFLAGGEDWRONG]);
+            scaledImage = boardImages[BOMBFLAGGEDWRONG].getScaledInstance(ImageWidth, ImageHeight, java.awt.Image.SCALE_SMOOTH);
+            image = new ImageIcon(scaledImage);
             button.setIcon(image);
             break;
 
             case 7:
-            image = new ImageIcon(boardImages[BOMBFLAGGEDCORRECT]);
+            //image = new ImageIcon(boardImages[BOMBFLAGGEDCORRECT]);
+            scaledImage = boardImages[BOMBFLAGGEDCORRECT].getScaledInstance(ImageWidth, ImageHeight, java.awt.Image.SCALE_SMOOTH);
+            image = new ImageIcon(scaledImage);
             button.setIcon(image);
             break;
 
             default:
             button.setIcon(null);
         }
+        frame.setVisible(true);
+
     }
 
     private void numberBoard(BoardButton button, int numberOfBombs) {
@@ -422,10 +487,14 @@ public class GUI {
 
             
         }
+        frame.setVisible(true);
     }
 
     private void addPressedButtonAnimation(BoardButton button) {
-        button.setPressedIcon(new ImageIcon(boardImages[PRESSEDBLANK]));
+        //button.setPressedIcon(new ImageIcon(boardImages[PRESSEDBLANK]));
+        Image scaledImage = boardImages[PRESSEDBLANK].getScaledInstance(ImageWidth, ImageHeight, java.awt.Image.SCALE_SMOOTH);
+        ImageIcon image = new ImageIcon(scaledImage);
+        button.setPressedIcon(image);
     }
 
     private void removePressedButtonAnimation(BoardButton button) {
@@ -560,45 +629,49 @@ public class GUI {
 	}
 	private void setTime() {
 
-        //int th = (watch%10000)/1000;
+        int th = (watch%10000)/1000;
 		int h = (watch%1000)/100;
         int t = (watch%100)/10;
         int o = watch % 10;
         try{
-            //timeth.setIcon(new ImageIcon(numberImages[th]));
-            timeh.setIcon(new ImageIcon(numberImages[h]));
-            timet.setIcon(new ImageIcon(numberImages[t]));
-            timeo.setIcon(new ImageIcon(numberImages[o]));
+            timeth.setIcon(new ImageIcon(numberImages[th].getScaledInstance(15,30,java.awt.Image.SCALE_SMOOTH)));
+            timeh.setIcon(new ImageIcon(numberImages[h].getScaledInstance(15,30,java.awt.Image.SCALE_SMOOTH)));
+            timet.setIcon(new ImageIcon(numberImages[t].getScaledInstance(15,30,java.awt.Image.SCALE_SMOOTH)));
+            timeo.setIcon(new ImageIcon(numberImages[o].getScaledInstance(15,30,java.awt.Image.SCALE_SMOOTH)));
         } catch (ArrayIndexOutOfBoundsException e) {
             System.out.println("Run out of time");
         }
 	}
 
     private void endTime() {
-        time.stop();
+        try{
+            time.stop();
+        } catch (NullPointerException e) {
+            System.out.println("Time has not been initiated, start a game to initiate time");
+        }
     }
 
     private void nullTime(){
-        //timeth.setIcon(new ImageIcon(numberImages[10]));
-        timeh.setIcon(new ImageIcon(numberImages[10]));
-        timet.setIcon(new ImageIcon(numberImages[10]));
-        timeo.setIcon(new ImageIcon(numberImages[10]));
+        timeth.setIcon(new ImageIcon(numberImages[10].getScaledInstance(15,30,java.awt.Image.SCALE_SMOOTH)));
+        timeh.setIcon(new ImageIcon(numberImages[10].getScaledInstance(15,30,java.awt.Image.SCALE_SMOOTH)));
+        timet.setIcon(new ImageIcon(numberImages[10].getScaledInstance(15,30,java.awt.Image.SCALE_SMOOTH)));
+        timeo.setIcon(new ImageIcon(numberImages[10].getScaledInstance(15,30,java.awt.Image.SCALE_SMOOTH)));
     }
 
 
     private void setBombs(int bombs) {
         //int bombs = engine.getNoBombs();
         
-        //int th = (bombs%10000)/1000;
+        int th = (bombs%10000)/1000;
 		int h = (bombs%1000)/100;
         int t = (bombs%100)/10;
         int o = bombs % 10;
 
         try{
-            //bombth.setIcon(new ImageIcon(numberImages[th]));
-            bombh.setIcon(new ImageIcon(numberImages[h]));
-            bombt.setIcon(new ImageIcon(numberImages[t]));
-            bombo.setIcon(new ImageIcon(numberImages[o]));
+            bombth.setIcon(new ImageIcon(numberImages[th].getScaledInstance(15,30,java.awt.Image.SCALE_SMOOTH)));
+            bombh.setIcon(new ImageIcon(numberImages[h].getScaledInstance(15,30,java.awt.Image.SCALE_SMOOTH)));
+            bombt.setIcon(new ImageIcon(numberImages[t].getScaledInstance(15,30,java.awt.Image.SCALE_SMOOTH)));
+            bombo.setIcon(new ImageIcon(numberImages[o].getScaledInstance(15,30,java.awt.Image.SCALE_SMOOTH)));
         } catch (ArrayIndexOutOfBoundsException e) {
             System.out.println("Too many bombs");
         }
@@ -619,7 +692,10 @@ public class GUI {
     }
 
     private void updateface(int facetype){
-        face.setIcon(new ImageIcon(faceImages[facetype]));
+        //face.setIcon(new ImageIcon(faceImages[facetype]));
+        Image scaledImage = faceImages[facetype].getScaledInstance(35, 35, java.awt.Image.SCALE_SMOOTH);
+        ImageIcon image = new ImageIcon(scaledImage);
+        face.setIcon(image);
     }
 
     public Engine getEngine() {
@@ -728,6 +804,7 @@ public class GUI {
 
                     resetTime();
                     resetGame();
+                    resizeFrame();
                     options.dispose();
                 }
             });
@@ -739,6 +816,7 @@ public class GUI {
                 public void actionPerformed(ActionEvent e){
                     resetTime();
                     resetGame();
+                    resizeFrame();
                     options.dispose();
                 }
             });
@@ -823,6 +901,7 @@ public class GUI {
 
             BoardButton source = (BoardButton)(e.getSource());
             gui = source.getGUI();
+            
 
             if(!started) {
                 started = true;
@@ -834,9 +913,13 @@ public class GUI {
 
             if(SwingUtilities.isLeftMouseButton(e)) {
 
+                blankBoard();
+
                 if(!(gui.getEngine().getSquare(source.getPosition()).getFlagged())) {
                     gui.getEngine().clickSquare(source.getPosition());
                 }
+
+                System.out.println("it runs here");
 
                 //gui.getEngine().clickSquare(source.getPosition());
                 
