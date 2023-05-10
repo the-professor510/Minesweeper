@@ -35,15 +35,12 @@ public class Engine {
             randint = (int) (Math.random()*width*height);
             if (randint != position){
                 
-                int y = (int)(randint%width);
-                int x = (int) (randint - y)/height;
+                int x = (int)(randint%width);
+                int y = (int) (randint - x)/width;
     
                 if (!(square[x][y].getIsBomb())) {
                     square[x][y].updateIsBomb(true);
                     totalBombsPlaced ++;
-                    //System.out.println("");
-                    //System.out.println(y);
-                    //System.out.println(x);
                 }
 
             }
@@ -163,12 +160,8 @@ public class Engine {
     public void clickSquare (int position) {
 
         //y*gridwidth+x
-        int y = (int)(position%width);
-        int x = (int) (position - y)/height;
-
-        System.out.println(position);
-        System.out.println("x is: " + x);
-        System.out.println("y is: " + y);
+        int x = (int)(position%width);
+        int y = (int) (position - x)/width;
 
         if (square[x][y].getIsBomb()){
             // game over
@@ -186,10 +179,6 @@ public class Engine {
 
     public void revealSquare(int x, int y){
 
-        //System.out.println("runs");
-        //System.out.println("x is: " + x);
-        //System.out.println("y is: " + y);
-
         if (square[x][y].getRevealed()){
             return;
         } else if (square[x][y].getFlagged()){
@@ -206,7 +195,6 @@ public class Engine {
         if (square[x][y].getNumBombsAround() == 0) {
             //there are no bombs around so clear a greater area
             gui.updatePaintedSquare( x, y, gui.CLEAR);
-            System.out.println("runs" + x);
             
             
 
@@ -312,8 +300,6 @@ public class Engine {
             }
         } else {
             // there is a bomb next to this square, reveal the number of bombs and stop
-            System.out.println(square[x][y].getNumBombsAround());
-            System.out.println("x: " + x + "   y: " + y);
             gui.updateNumberedSquare(x,y,square[x][y].getNumBombsAround());
             return;
         }
@@ -322,16 +308,10 @@ public class Engine {
     public boolean checkWin() {
         boolean won = true;
 
-        //System.out.println("\b");
 
         for( int y=0; y<height; y++) {
-            //System.out.println("");
             for (int x = 0; x<width; x++) {
                 //if there is a square that is not a bomb and has not been revealled then the game is not over
-                //System.out.println(square[y][x].getIsBomb());
-                //System.out.println(square[y][x].getRevealed());
-                //System.out.println(x);
-                //System.out.println(y);
 
 
                 if (!(square[x][y].getIsBomb())){
@@ -378,8 +358,8 @@ public class Engine {
 
     public Square getSquare(int position) {
 
-        int y = (int)(position%width);
-        int x = (int) (position - y)/height;
+        int x = (int)(position%width);
+        int y = (int) (position - x)/width;
 
         return square[x][y];
     }

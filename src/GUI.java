@@ -30,7 +30,7 @@ public class GUI {
 
     private BoardButton[][] buttonsArray;
 
-    private int gridwidth = 10;
+    private int gridwidth = 15;
     private int gridheight = 10;
 
     private final int MINGRIDHEIGHT = 10;
@@ -112,8 +112,6 @@ public class GUI {
       
         int gameInformationWidth = gameInformation.getWidth();
         int gameInformationHeight = gameInformation.getHeight();
-        System.out.println(gameInformationHeight);
-        System.out.println(gameInformationWidth);
 
         int boardWidth = board.getWidth() + 2*sideMargins;
         int boardHeight = board.getHeight() + topMargin + bottomMargin;
@@ -137,7 +135,8 @@ public class GUI {
         //frame.setSize(new Dimension(1500,1500));
         //frame.setMinimumSize(new Dimension(19*gridwidth,20*gridheight+500));
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setResizable(false);
+        frame.setResizable(true);
+
 
         createMenu();
                 
@@ -149,7 +148,6 @@ public class GUI {
         borderLayout = new BorderLayout();
         contentPane.setLayout(borderLayout);
 
-        
         contentPane.add(board,BorderLayout.CENTER);
         contentPane.add(gameInformation,BorderLayout.SOUTH);
         contentPane.add(rightside, BorderLayout.LINE_END);
@@ -326,8 +324,8 @@ public class GUI {
 
         buttonsArray = new BoardButton[gridwidth][gridheight];
 
-        for (int x = 0; x< gridwidth; x++) {
-            for (int y = 0; y<gridheight; y++) {
+        for (int y = 0; y<gridheight; y++) {
+            for (int x = 0; x< gridwidth; x++) {
 
                 buttonsArray[x][y] = null;
                 buttonsArray[x][y] = new BoardButton(this,(y*gridwidth+x));
@@ -353,8 +351,8 @@ public class GUI {
             String line = "";
             for (int x = 0; x<gridwidth; x++) {
 
-                buttonsArray[x][y] = null;
-                buttonsArray[x][y] = new BoardButton(this,(y*gridwidth+x));
+                //buttonsArray[x][y] = null;
+                //buttonsArray[x][y] = new BoardButton(this,(y*gridwidth+x));
                 
                 Square square = engine.getSquare(y*gridwidth+x);
                 if(square.getIsBomb()){
@@ -378,62 +376,62 @@ public class GUI {
 
         switch (imageType) {
             case 0:
-            scaledImage = boardImages[UNCLICKED].getScaledInstance(ImageWidth, ImageHeight, java.awt.Image.SCALE_SMOOTH);
-            image = new ImageIcon(scaledImage);
-            button.setIcon(image);             
-            break;
+                scaledImage = boardImages[UNCLICKED].getScaledInstance(ImageWidth, ImageHeight, java.awt.Image.SCALE_SMOOTH);
+                image = new ImageIcon(scaledImage);
+                button.setIcon(image);             
+                break;
 
             case 1:
-            //image = new ImageIcon(boardImages[FLAGGED]);
-            scaledImage = boardImages[FLAGGED].getScaledInstance(ImageWidth, ImageHeight, java.awt.Image.SCALE_SMOOTH);
-            image = new ImageIcon(scaledImage);
-            button.setIcon(image);
-            break;
+                //image = new ImageIcon(boardImages[FLAGGED]);
+                scaledImage = boardImages[FLAGGED].getScaledInstance(ImageWidth, ImageHeight, java.awt.Image.SCALE_SMOOTH);
+                image = new ImageIcon(scaledImage);
+                button.setIcon(image);
+                break;
 
             case 2:
-            //image = new ImageIcon(boardImages[QUESTION]);
-            scaledImage = boardImages[QUESTION].getScaledInstance(ImageWidth, ImageHeight, java.awt.Image.SCALE_SMOOTH);
-            image = new ImageIcon(scaledImage);
-            button.setIcon(image);
-            break;
+                //image = new ImageIcon(boardImages[QUESTION]);
+                scaledImage = boardImages[QUESTION].getScaledInstance(ImageWidth, ImageHeight, java.awt.Image.SCALE_SMOOTH);
+                image = new ImageIcon(scaledImage);
+                button.setIcon(image);
+                break;
 
             case 3:
-            //image = new ImageIcon(boardImages[CLICKED]);
-            scaledImage = boardImages[CLICKED].getScaledInstance(ImageWidth, ImageHeight, java.awt.Image.SCALE_SMOOTH);
-            image = new ImageIcon(scaledImage);
-            button.setIcon(image);
-            break;
+                //image = new ImageIcon(boardImages[CLICKED]);
+                scaledImage = boardImages[CLICKED].getScaledInstance(ImageWidth, ImageHeight, java.awt.Image.SCALE_SMOOTH);
+                image = new ImageIcon(scaledImage);
+                button.setIcon(image);
+                break;
 
             case 4:
-            //image = new ImageIcon(boardImages[BOMB]);
-            scaledImage = boardImages[BOMB].getScaledInstance(ImageWidth, ImageHeight, java.awt.Image.SCALE_SMOOTH);
-            image = new ImageIcon(scaledImage);
-            button.setIcon(image);
-            break;
+                //image = new ImageIcon(boardImages[BOMB]);
+                scaledImage = boardImages[BOMB].getScaledInstance(ImageWidth, ImageHeight, java.awt.Image.SCALE_SMOOTH);
+                image = new ImageIcon(scaledImage);
+                button.setIcon(image);
+                break;
 
             case 5:
-            //image = new ImageIcon(boardImages[BOMBCLICKED]);
-            scaledImage = boardImages[BOMBCLICKED].getScaledInstance(ImageWidth, ImageHeight, java.awt.Image.SCALE_SMOOTH);
-            image = new ImageIcon(scaledImage);
-            button.setIcon(image);
-            break;
+                //image = new ImageIcon(boardImages[BOMBCLICKED]);
+                scaledImage = boardImages[BOMBCLICKED].getScaledInstance(ImageWidth, ImageHeight, java.awt.Image.SCALE_SMOOTH);
+                image = new ImageIcon(scaledImage);
+                button.setIcon(image);
+                break;
 
             case 6:
-            //image = new ImageIcon(boardImages[BOMBFLAGGEDWRONG]);
-            scaledImage = boardImages[BOMBFLAGGEDWRONG].getScaledInstance(ImageWidth, ImageHeight, java.awt.Image.SCALE_SMOOTH);
-            image = new ImageIcon(scaledImage);
-            button.setIcon(image);
-            break;
+                //image = new ImageIcon(boardImages[BOMBFLAGGEDWRONG]);
+                scaledImage = boardImages[BOMBFLAGGEDWRONG].getScaledInstance(ImageWidth, ImageHeight, java.awt.Image.SCALE_SMOOTH);
+                image = new ImageIcon(scaledImage);
+                button.setIcon(image);
+                break;
 
             case 7:
-            //image = new ImageIcon(boardImages[BOMBFLAGGEDCORRECT]);
-            scaledImage = boardImages[BOMBFLAGGEDCORRECT].getScaledInstance(ImageWidth, ImageHeight, java.awt.Image.SCALE_SMOOTH);
-            image = new ImageIcon(scaledImage);
-            button.setIcon(image);
-            break;
+                //image = new ImageIcon(boardImages[BOMBFLAGGEDCORRECT]);
+                scaledImage = boardImages[BOMBFLAGGEDCORRECT].getScaledInstance(ImageWidth, ImageHeight, java.awt.Image.SCALE_SMOOTH);
+                image = new ImageIcon(scaledImage);
+                button.setIcon(image);
+                break;
 
             default:
-            button.setIcon(null);
+                button.setIcon(null);
         }
         frame.setVisible(true);
 
@@ -441,53 +439,58 @@ public class GUI {
 
     private void numberBoard(BoardButton button, int numberOfBombs) {
         switch (numberOfBombs) {
+            ///*
             case 1:
-            button.setText("1");
-            button.setForeground(new Color(10,10,10));
-            break;
+                button.setText("1");
+                button.setForeground(new Color(10,10,10));
+                break;
 
             case 2:
-            button.setText("2");
-            button.setForeground(new Color(10,200,100));
-            button.setFont(new Font(Font.DIALOG_INPUT,  Font.BOLD, 15));
-            break;
+                button.setText("2");
+                button.setForeground(new Color(10,200,100));
+                button.setFont(new Font(Font.DIALOG_INPUT,  Font.BOLD, 15));
+                break;
 
             case 3:
-            button.setText("3");
-            button.setForeground(new Color(10,10,200));
-            break;
+                button.setText("3");
+                button.setForeground(new Color(10,10,200));
+                break;
 
             case 4:
-            button.setText("4");
-            button.setForeground(new Color(10,100,10));
-            break;
+                button.setText("4");
+                button.setForeground(new Color(10,100,10));
+                break;
 
             case 5:
-            button.setText("5");
-            button.setForeground(new Color(10,100,10));
-            break;
+                button.setText("5");
+                button.setForeground(new Color(10,100,10));
+                break;
 
             case 6:
-            button.setText("6");
-            button.setForeground(new Color(200,10,10));
-            break;
+                button.setText("6");
+                button.setForeground(new Color(200,10,10));
+                break;
 
             case 7:
-            button.setText("7");
-            button.setForeground(new Color(100,10,10));
-            break;
+                button.setText("7");
+                button.setForeground(new Color(100,10,10));
+                break;
 
             case 8:
-            button.setText("8");
-            button.setForeground(new Color(70,10,10));
-            break;
+                button.setText("8");
+                button.setForeground(new Color(70,10,10));
+                break;
+            //*/
+            
 
             default:
-            button.setText(null);
+                
+                //button.setText(String.valueOf(numberOfBombs));
+                button.setText(null);
 
             
         }
-        frame.setVisible(true);
+        //frame.setVisible(true);
     }
 
     private void addPressedButtonAnimation(BoardButton button) {
@@ -901,28 +904,38 @@ public class GUI {
 
             BoardButton source = (BoardButton)(e.getSource());
             gui = source.getGUI();
+            int position = source.getPosition();
+            //y*gridwidth+x
+            int x = (int)(position%gui.getGridwidth());
+            int y = (int) (position - x)/gui.getGridwidth();
+            
+            System.out.println(position);
+            System.out.println("x is " + x);
+            System.out.println(position-x);
+            System.out.println("y is " + y);
             
 
+            
             if(!started) {
                 started = true;
                 flags = numBombs;
                 resetTime();
                 startTime();
-                gui.getEngine().initialiseBoard(source.getPosition());
+                gui.getEngine().initialiseBoard(position);
             }
 
             if(SwingUtilities.isLeftMouseButton(e)) {
 
                 blankBoard();
 
-                if(!(gui.getEngine().getSquare(source.getPosition()).getFlagged())) {
-                    gui.getEngine().clickSquare(source.getPosition());
+                if(!(gui.getEngine().getSquare(position).getFlagged())) {
+                    gui.getEngine().clickSquare(position);
+                    gui.removeActionListener(x, y);
+                    
                 }
 
-                System.out.println("it runs here");
-
                 //gui.getEngine().clickSquare(source.getPosition());
-                
+            
 
 
 
@@ -975,6 +988,7 @@ public class GUI {
                 }
                 
                 
+                
                 /*if (!(source.getClicked())){
                     String s = "Action event detected."
                             + newline
@@ -990,6 +1004,7 @@ public class GUI {
                             + " Already clicked";
                     output.append(s + newline);
                     output.setCaretPosition(output.getDocument().getLength());
+                    
                 }*/
             }
         }
