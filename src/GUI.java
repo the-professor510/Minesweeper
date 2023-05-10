@@ -44,6 +44,7 @@ public class GUI {
 
     private JPanel gameInformation = new JPanel();
     private JPanel board = new JPanel();
+    private JPanel topside = new JPanel();
     private JPanel leftside = new JPanel();
     private JPanel rightside = new JPanel();
 
@@ -132,10 +133,8 @@ public class GUI {
         frame = new JFrame();
 
         frame.setTitle("Minesweeper");
-        //frame.setSize(new Dimension(1500,1500));
-        //frame.setMinimumSize(new Dimension(19*gridwidth,20*gridheight+500));
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setResizable(true);
+        frame.setResizable(false);
 
 
         createMenu();
@@ -153,14 +152,13 @@ public class GUI {
         contentPane.add(rightside, BorderLayout.LINE_END);
         contentPane.add(leftside, BorderLayout.LINE_START);
 
-        //contentPane.add(createContentPane(),BorderLayout.NORTH);
-
-        resizeFrame();
-        frame.pack();
-        
+        contentPane.add(topside,BorderLayout.NORTH);
 
         frame.setJMenuBar(menuBar);
+
+
         frame.setVisible(true);
+        resizeFrame();
     }
 
     private void createMenu() {
@@ -237,8 +235,6 @@ public class GUI {
                 resetGame();
             }
         });
-        //face.setMargin(new Insets(0,0,0,0));
-        //face.setBackground(new Color(0,0,0,0));
         face.setBorderPainted(false);
         gameInformation.add(face);
         gameInformation.add(Box.createHorizontalGlue());
@@ -349,18 +345,12 @@ public class GUI {
         System.out.println("");
         for (int y = 0; y< gridheight; y++) {
             String line = "";
-            for (int x = 0; x<gridwidth; x++) {
-
-                //buttonsArray[x][y] = null;
-                //buttonsArray[x][y] = new BoardButton(this,(y*gridwidth+x));
-                
+            for (int x = 0; x<gridwidth; x++) {                
                 Square square = engine.getSquare(y*gridwidth+x);
                 if(square.getIsBomb()){
                     line += "B";
                 } else{
-                    //paintButton(buttonsArray[x][y], CLICKED);
                     int numBombs = square.getNumBombsAround();
-                    //numberBoard(buttonsArray[x][y], numBombs);
                     line+= numBombs;
                 }
             }
@@ -382,49 +372,42 @@ public class GUI {
                 break;
 
             case 1:
-                //image = new ImageIcon(boardImages[FLAGGED]);
                 scaledImage = boardImages[FLAGGED].getScaledInstance(ImageWidth, ImageHeight, java.awt.Image.SCALE_SMOOTH);
                 image = new ImageIcon(scaledImage);
                 button.setIcon(image);
                 break;
 
             case 2:
-                //image = new ImageIcon(boardImages[QUESTION]);
                 scaledImage = boardImages[QUESTION].getScaledInstance(ImageWidth, ImageHeight, java.awt.Image.SCALE_SMOOTH);
                 image = new ImageIcon(scaledImage);
                 button.setIcon(image);
                 break;
 
             case 3:
-                //image = new ImageIcon(boardImages[CLICKED]);
                 scaledImage = boardImages[CLICKED].getScaledInstance(ImageWidth, ImageHeight, java.awt.Image.SCALE_SMOOTH);
                 image = new ImageIcon(scaledImage);
                 button.setIcon(image);
                 break;
 
             case 4:
-                //image = new ImageIcon(boardImages[BOMB]);
                 scaledImage = boardImages[BOMB].getScaledInstance(ImageWidth, ImageHeight, java.awt.Image.SCALE_SMOOTH);
                 image = new ImageIcon(scaledImage);
                 button.setIcon(image);
                 break;
 
             case 5:
-                //image = new ImageIcon(boardImages[BOMBCLICKED]);
                 scaledImage = boardImages[BOMBCLICKED].getScaledInstance(ImageWidth, ImageHeight, java.awt.Image.SCALE_SMOOTH);
                 image = new ImageIcon(scaledImage);
                 button.setIcon(image);
                 break;
 
             case 6:
-                //image = new ImageIcon(boardImages[BOMBFLAGGEDWRONG]);
                 scaledImage = boardImages[BOMBFLAGGEDWRONG].getScaledInstance(ImageWidth, ImageHeight, java.awt.Image.SCALE_SMOOTH);
                 image = new ImageIcon(scaledImage);
                 button.setIcon(image);
                 break;
 
             case 7:
-                //image = new ImageIcon(boardImages[BOMBFLAGGEDCORRECT]);
                 scaledImage = boardImages[BOMBFLAGGEDCORRECT].getScaledInstance(ImageWidth, ImageHeight, java.awt.Image.SCALE_SMOOTH);
                 image = new ImageIcon(scaledImage);
                 button.setIcon(image);
@@ -439,7 +422,6 @@ public class GUI {
 
     private void numberBoard(BoardButton button, int numberOfBombs) {
         switch (numberOfBombs) {
-            ///*
             case 1:
                 button.setText("1");
                 button.setForeground(new Color(10,10,10));
@@ -480,21 +462,15 @@ public class GUI {
                 button.setText("8");
                 button.setForeground(new Color(70,10,10));
                 break;
-            //*/
-            
 
             default:
-                
-                //button.setText(String.valueOf(numberOfBombs));
                 button.setText(null);
 
             
         }
-        //frame.setVisible(true);
     }
 
     private void addPressedButtonAnimation(BoardButton button) {
-        //button.setPressedIcon(new ImageIcon(boardImages[PRESSEDBLANK]));
         Image scaledImage = boardImages[PRESSEDBLANK].getScaledInstance(ImageWidth, ImageHeight, java.awt.Image.SCALE_SMOOTH);
         ImageIcon image = new ImageIcon(scaledImage);
         button.setPressedIcon(image);
@@ -535,12 +511,13 @@ public class GUI {
     }
 
     public void endGame(boolean gameWon) {
+        endTime();
+        
         if(gameWon) {
             updateface(WIN);
         } else {
             updateface(DEAD);
         }
-        endTime();
 
         for (int y = 0; y< gridheight; y++) {
             for (int x = 0; x<gridwidth; x++) {
@@ -740,6 +717,8 @@ public class GUI {
 
 
         public void actionPerformed(ActionEvent e) {
+
+            endTime();
 
             options = new JDialog(frame, "Options", Dialog.ModalityType.DOCUMENT_MODAL);
 
