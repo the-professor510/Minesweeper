@@ -801,6 +801,8 @@ public class GUI {
                     int newWidth = Integer.valueOf(widthSpinner.getValue().toString());
                     int newBombValue = Integer.valueOf(bombSpinner.getValue().toString());
 
+                    numBombs = newBombValue;
+
                     setBombs(newBombValue);
                     changeGridheight(newHeight);
                     changeGridwidth(newWidth);
@@ -848,6 +850,7 @@ public class GUI {
             }
 
             bombSpinner = new JSpinner(bombModel);
+            System.out.println(bombSpinner.getValue());
             options.pack();
 
         }
