@@ -20,12 +20,6 @@ public class GUI {
     private JMenu menu;
     private JMenuItem menuItem;
 
-    /*
-    private JTextArea output;
-    private JScrollPane scrollPane;
-    private String newline = "\n";
-    */
-
     private boolean started = false;
 
     private BoardButton[][] buttonsArray;
@@ -51,7 +45,6 @@ public class GUI {
     private GridLayout layout;
     private BorderLayout borderLayout;
 
-    //private customListener action = new customListener();
     private optionListener optionButton = new optionListener();
     private gameListener gameButton = new gameListener();
 
@@ -80,7 +73,6 @@ public class GUI {
     private static JLabel bombt;
     private static JLabel bombo;
 
-    private static final int OOH = 1;
     private static final int DEAD = 0;
     private static final int SMILE = 2;
     private static final int WIN = 3;
@@ -108,7 +100,6 @@ public class GUI {
     }
 
     private void resizeFrame() {
-        //int totalWidth;
         int totalHeight;
       
         int gameInformationWidth = gameInformation.getWidth();
@@ -193,6 +184,8 @@ public class GUI {
         menuItem.addActionListener(new ActionListener(){
             public void actionPerformed(ActionEvent e) {
                 // gives a link to the wikipedia for minesweeper
+                endTime();
+                resetGame();
                 JOptionPane.showConfirmDialog(null, "This is a java implementaion of the classic computer game Minesweeper. \n"
                                                     +"The aim of the game is to clear the board without clicking on any mines. \n" 
                                                     +"A full explanation of the rules of minesweeper can be found when following \n"
@@ -281,29 +274,6 @@ public class GUI {
         int dotIndex = classString.lastIndexOf(".");
         return classString.substring(dotIndex+1);
     }
-
-    /*
-    public Container createContentPane() {
-        //Create the content-pane-to-be.
-        JPanel contentPane = new JPanel(new BorderLayout());
-        contentPane.setOpaque(true);
-        contentPane.setSize(new Dimension(2,100));
-        
-
-        
-        //Create a scrolled text area.
-        output = new JTextArea(5, 10);
-        output.setEditable(false);
-        scrollPane = new JScrollPane(output);
-
-        //Add the text area to the content pane.
-        contentPane.add(scrollPane, BorderLayout.CENTER);
-        
-
-        return contentPane;
-    }*/
-
-
 
     private void newBoard() {
 
@@ -421,6 +391,9 @@ public class GUI {
     }
 
     private void numberBoard(BoardButton button, int numberOfBombs) {
+
+        button.setFont(new Font(Font.DIALOG_INPUT,  Font.BOLD, 15));
+        
         switch (numberOfBombs) {
             case 1:
                 button.setText("1");
@@ -430,7 +403,6 @@ public class GUI {
             case 2:
                 button.setText("2");
                 button.setForeground(new Color(10,200,100));
-                button.setFont(new Font(Font.DIALOG_INPUT,  Font.BOLD, 15));
                 break;
 
             case 3:
@@ -465,8 +437,8 @@ public class GUI {
 
             default:
                 button.setText(null);
+                break;
 
-            
         }
     }
 
@@ -499,7 +471,6 @@ public class GUI {
 
     public void updatePaintedSquare(int x, int y, int newFace) {
         BoardButton button = buttonsArray[x][y];
-        
         paintButton(button, newFace);
         numberBoard(button, CLEAR);
     }
@@ -587,12 +558,6 @@ public class GUI {
         }
     }
 
-
-
-
-
-
-
     private void resetTime() {
 		watch = 0;
 		setTime();
@@ -672,7 +637,6 @@ public class GUI {
     }
 
     private void updateface(int facetype){
-        //face.setIcon(new ImageIcon(faceImages[facetype]));
         Image scaledImage = faceImages[facetype].getScaledInstance(35, 35, java.awt.Image.SCALE_SMOOTH);
         ImageIcon image = new ImageIcon(scaledImage);
         face.setIcon(image);
@@ -681,24 +645,6 @@ public class GUI {
     public Engine getEngine() {
         return engine;
     }
-
-
-
-
-
-
-    /*
-    class customListener implements ActionListener {
-        public void actionPerformed(ActionEvent e) {
-            JMenuItem source = (JMenuItem)(e.getSource());
-            String s = "Action event detected."
-                        + newline
-                        + "    Event source: " + source.getText()
-                        + " (an instance of " + getClassName(source) + ")";
-            output.append(s + newline);
-            output.setCaretPosition(output.getDocument().getLength());
-        }
-    }*/
 
     class optionListener implements ActionListener {
         private SpinnerNumberModel bombModel;
@@ -886,16 +832,7 @@ public class GUI {
 
             BoardButton source = (BoardButton)(e.getSource());
             gui = source.getGUI();
-            int position = source.getPosition();
-            //y*gridwidth+x
-            int x = (int)(position%gui.getGridwidth());
-            int y = (int) (position - x)/gui.getGridwidth();
-            
-            System.out.println(position);
-            System.out.println("x is " + x);
-            System.out.println(position-x);
-            System.out.println("y is " + y);
-            
+            int position = source.getPosition();       
 
             
             if(!started) {
@@ -912,29 +849,8 @@ public class GUI {
 
                 if(!(gui.getEngine().getSquare(position).getFlagged())) {
                     gui.getEngine().clickSquare(position);
-                    gui.removeActionListener(x, y);
                     
-                }
-
-                //gui.getEngine().clickSquare(source.getPosition());
-            
-
-
-
-
-                /*if (source.getBlankFlagOrQuestion() == 0) {
-                    source.changeClicked(true);
-                    //removePressedButtonAnimation(source);
-
-                    String s = "Action event detected."
-                        + newline
-                        + "    Event source: " + source.getName()
-                        + " (an instance of " + getClassName(source) + ")";
-                    output.append(s + newline);
-                    output.setCaretPosition(output.getDocument().getLength());
-                }*/
-
-            
+                }           
             } else if (SwingUtilities.isRightMouseButton(e)) {
 
 
@@ -968,26 +884,6 @@ public class GUI {
                             break;
                     }
                 }
-                
-                
-                
-                /*if (!(source.getClicked())){
-                    String s = "Action event detected."
-                            + newline
-                            + "    Event source1: " + source.getName()
-                            + " (an instance of " + getClassName(source) + ")";
-                    output.append(s + newline);
-                    output.setCaretPosition(output.getDocument().getLength());
-                    //source.changeClicked(true);
-                } else {
-                    String s = "Action event detected."
-                            + newline
-                            + "    Event source1: " + source.getName()
-                            + " Already clicked";
-                    output.append(s + newline);
-                    output.setCaretPosition(output.getDocument().getLength());
-                    
-                }*/
             }
         }
     }

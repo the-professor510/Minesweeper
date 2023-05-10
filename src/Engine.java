@@ -364,4 +364,3 @@ public class Engine {
         return square[x][y];
     }
 }
-//On the press of a button i want a new board to be created. The square that is clicked cannot be a bomb
