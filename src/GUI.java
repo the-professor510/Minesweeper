@@ -36,8 +36,11 @@ public class GUI {
     private final gameListener gameButton = new gameListener();
 
     private Image[] boardImages;
+    private ImageIcon[] boardImageIcons;
     private static Image[] numberImages;
+    private static ImageIcon[] numberImageIcons;
     private Image[] faceImages;
+    private ImageIcon[] faceImageIcons;
 
     private final int ImageWidth = 20;
     private final int ImageHeight = 20;
@@ -130,7 +133,6 @@ public class GUI {
 
         frame.setJMenuBar(menuBar);
 
-
         frame.setVisible(true);
         resizeFrame();
     }
@@ -139,7 +141,6 @@ public class GUI {
 
         //New Menu Bar at the top of the window
         menuBar = new JMenuBar();
-
 
         JMenu menu = new JMenu("Game");
         menuBar.add(menu);
@@ -224,7 +225,6 @@ public class GUI {
 
     private void resetGame() {
         //want to get a new engine
-        engine = null;
         engine = new Engine(this, gridWidth, gridHeight, numBombs);
 
         //rebuild the board
@@ -249,9 +249,9 @@ public class GUI {
 
         GridLayout layout = new GridLayout(gridHeight, gridWidth, 0, 0);
         board.setLayout(layout);
-        board.setPreferredSize(new Dimension((ImageWidth+1)*gridWidth,(ImageWidth+1)*gridHeight));
-        board.setMinimumSize(board.getPreferredSize());
-        board.setMaximumSize(board.getPreferredSize());
+        board.setPreferredSize(new Dimension((ImageWidth)*gridWidth,(ImageWidth)*gridHeight));
+        //board.setMinimumSize(board.getPreferredSize());
+        //board.setMaximumSize(board.getPreferredSize());
         board.setSize(board.getPreferredSize());
         
 
@@ -317,44 +317,44 @@ public class GUI {
 
         switch (imageType) {
             case 0 -> {
-                scaledImage = boardImages[UNCLICKED].getScaledInstance(ImageWidth, ImageHeight, Image.SCALE_SMOOTH);
-                image = new ImageIcon(scaledImage);
-                button.setIcon(image);
+                //scaledImage = boardImages[UNCLICKED].getScaledInstance(ImageWidth, ImageHeight, Image.SCALE_SMOOTH);
+                //image = new ImageIcon(scaledImage);
+                button.setIcon(boardImageIcons[UNCLICKED]);
             }
             case 1 -> {
-                scaledImage = boardImages[FLAGGED].getScaledInstance(ImageWidth, ImageHeight, Image.SCALE_SMOOTH);
-                image = new ImageIcon(scaledImage);
-                button.setIcon(image);
+                //scaledImage = boardImages[FLAGGED].getScaledInstance(ImageWidth, ImageHeight, Image.SCALE_SMOOTH);
+                //image = new ImageIcon(scaledImage);
+                button.setIcon(boardImageIcons[FLAGGED]);
             }
             case 2 -> {
-                scaledImage = boardImages[QUESTION].getScaledInstance(ImageWidth, ImageHeight, Image.SCALE_SMOOTH);
-                image = new ImageIcon(scaledImage);
-                button.setIcon(image);
+                //scaledImage = boardImages[QUESTION].getScaledInstance(ImageWidth, ImageHeight, Image.SCALE_SMOOTH);
+                //image = new ImageIcon(scaledImage);
+                button.setIcon(boardImageIcons[QUESTION]);
             }
             case 3 -> {
-                scaledImage = boardImages[CLICKED].getScaledInstance(ImageWidth, ImageHeight, Image.SCALE_SMOOTH);
-                image = new ImageIcon(scaledImage);
-                button.setIcon(image);
+                //scaledImage = boardImages[CLICKED].getScaledInstance(ImageWidth, ImageHeight, Image.SCALE_SMOOTH);
+                //image = new ImageIcon(scaledImage);
+                button.setIcon(boardImageIcons[CLICKED]);
             }
             case 4 -> {
-                scaledImage = boardImages[BOMB].getScaledInstance(ImageWidth, ImageHeight, Image.SCALE_SMOOTH);
-                image = new ImageIcon(scaledImage);
-                button.setIcon(image);
+                //scaledImage = boardImages[BOMB].getScaledInstance(ImageWidth, ImageHeight, Image.SCALE_SMOOTH);
+                //image = new ImageIcon(scaledImage);
+                button.setIcon(boardImageIcons[BOMB]);
             }
             case 5 -> {
-                scaledImage = boardImages[BOMBCLICKED].getScaledInstance(ImageWidth, ImageHeight, Image.SCALE_SMOOTH);
-                image = new ImageIcon(scaledImage);
-                button.setIcon(image);
+                //scaledImage = boardImages[BOMBCLICKED].getScaledInstance(ImageWidth, ImageHeight, Image.SCALE_SMOOTH);
+                //image = new ImageIcon(scaledImage);
+                button.setIcon(boardImageIcons[BOMBCLICKED]);
             }
             case 6 -> {
-                scaledImage = boardImages[BOMBFLAGGEDWRONG].getScaledInstance(ImageWidth, ImageHeight, Image.SCALE_SMOOTH);
-                image = new ImageIcon(scaledImage);
-                button.setIcon(image);
+                //scaledImage = boardImages[BOMBFLAGGEDWRONG].getScaledInstance(ImageWidth, ImageHeight, Image.SCALE_SMOOTH);
+                //image = new ImageIcon(scaledImage);
+                button.setIcon(boardImageIcons[BOMBFLAGGEDWRONG]);
             }
             case 7 -> {
-                scaledImage = boardImages[BOMBFLAGGEDCORRECT].getScaledInstance(ImageWidth, ImageHeight, Image.SCALE_SMOOTH);
-                image = new ImageIcon(scaledImage);
-                button.setIcon(image);
+                //scaledImage = boardImages[BOMBFLAGGEDCORRECT].getScaledInstance(ImageWidth, ImageHeight, Image.SCALE_SMOOTH);
+                //image = new ImageIcon(scaledImage);
+                button.setIcon(boardImageIcons[BOMBFLAGGEDCORRECT]);
             }
             default -> button.setIcon(null);
         }
@@ -404,9 +404,9 @@ public class GUI {
     }
 
     private void addPressedButtonAnimation(BoardButton button) {
-        Image scaledImage = boardImages[PRESSEDBLANK].getScaledInstance(ImageWidth, ImageHeight, java.awt.Image.SCALE_SMOOTH);
-        ImageIcon image = new ImageIcon(scaledImage);
-        button.setPressedIcon(image);
+        //Image scaledImage = boardImages[PRESSEDBLANK].getScaledInstance(ImageWidth, ImageHeight, java.awt.Image.SCALE_SMOOTH);
+        //ImageIcon image = new ImageIcon(scaledImage);
+        button.setPressedIcon(boardImageIcons[PRESSEDBLANK]);
     }
 
     private void removePressedButtonAnimation(BoardButton button) {
@@ -470,6 +470,7 @@ public class GUI {
 
         //read in images for the board
         boardImages = new Image[9];
+        boardImageIcons = new ImageIcon[9];
         String[] boardAssets = {""};
 
         try{
@@ -482,13 +483,17 @@ public class GUI {
             try{
                 assert boardAssets != null;
                 boardImages[i] = ImageIO.read(new File("src/Assests/Board/" + boardAssets[i]));
+                Image scaledImage = boardImages[i].getScaledInstance(ImageWidth, ImageHeight, Image.SCALE_SMOOTH);
+                boardImageIcons[i] = new ImageIcon(scaledImage);
             } catch (IOException e) {
                 System.out.println("error with board Images");
             }
         }
 
+
         //read in images for the numbers
         numberImages = new Image[11];
+        numberImageIcons = new ImageIcon[11];
         String[] numberAssets = {""};
         try{
             numberAssets = (new File("src/Assests/Information/Time")).list();
@@ -500,6 +505,8 @@ public class GUI {
             try{
                 assert numberAssets != null;
                 numberImages[i] = ImageIO.read(new File("src/Assests/Information/Time/" + numberAssets[i]));
+                Image scaledImage = numberImages[i].getScaledInstance(15,30 , Image.SCALE_SMOOTH);
+                numberImageIcons[i] = new ImageIcon(scaledImage);
             } catch (IOException e) {
                 System.out.println("error with number Images");
             }
@@ -507,6 +514,7 @@ public class GUI {
 
         //read in images for the face
         faceImages = new Image[4];
+        faceImageIcons = new ImageIcon[4];
         String[] faceAssets = {""};
         try{
             faceAssets = (new File("src/Assests/Information/Face")).list();
@@ -518,6 +526,8 @@ public class GUI {
             try{
                 assert faceAssets != null;
                 faceImages[i] = ImageIO.read(new File("src/Assests/Information/Face/" + faceAssets[i]));
+                Image scaledImage = faceImages[i].getScaledInstance(35, 35, Image.SCALE_SMOOTH);
+                faceImageIcons[i] = new ImageIcon(scaledImage);
             } catch (IOException e) {
                 System.out.println("error with face Images");
             }
@@ -543,10 +553,10 @@ public class GUI {
         int t = (watch%100)/10;
         int o = watch % 10;
         try{
-            timeth.setIcon(new ImageIcon(numberImages[th].getScaledInstance(15,30,java.awt.Image.SCALE_SMOOTH)));
-            timeh.setIcon(new ImageIcon(numberImages[h].getScaledInstance(15,30,java.awt.Image.SCALE_SMOOTH)));
-            timet.setIcon(new ImageIcon(numberImages[t].getScaledInstance(15,30,java.awt.Image.SCALE_SMOOTH)));
-            timeo.setIcon(new ImageIcon(numberImages[o].getScaledInstance(15,30,java.awt.Image.SCALE_SMOOTH)));
+            timeth.setIcon(numberImageIcons[th]);
+            timeh.setIcon(numberImageIcons[h]);
+            timet.setIcon(numberImageIcons[t]);
+            timeo.setIcon(numberImageIcons[o]);
         } catch (ArrayIndexOutOfBoundsException e) {
             System.out.println("Run out of time");
         }
@@ -561,10 +571,10 @@ public class GUI {
     }
 
     private void nullTime(){
-        timeth.setIcon(new ImageIcon(numberImages[10].getScaledInstance(15,30,java.awt.Image.SCALE_SMOOTH)));
-        timeh.setIcon(new ImageIcon(numberImages[10].getScaledInstance(15,30,java.awt.Image.SCALE_SMOOTH)));
-        timet.setIcon(new ImageIcon(numberImages[10].getScaledInstance(15,30,java.awt.Image.SCALE_SMOOTH)));
-        timeo.setIcon(new ImageIcon(numberImages[10].getScaledInstance(15,30,java.awt.Image.SCALE_SMOOTH)));
+        timeth.setIcon(numberImageIcons[10]);
+        timeh.setIcon(numberImageIcons[10]);
+        timet.setIcon(numberImageIcons[10]);
+        timeo.setIcon(numberImageIcons[10]);
     }
 
 
@@ -577,10 +587,10 @@ public class GUI {
         int o = bombs % 10;
 
         try{
-            bombth.setIcon(new ImageIcon(numberImages[th].getScaledInstance(15,30,java.awt.Image.SCALE_SMOOTH)));
-            bombh.setIcon(new ImageIcon(numberImages[h].getScaledInstance(15,30,java.awt.Image.SCALE_SMOOTH)));
-            bombt.setIcon(new ImageIcon(numberImages[t].getScaledInstance(15,30,java.awt.Image.SCALE_SMOOTH)));
-            bombo.setIcon(new ImageIcon(numberImages[o].getScaledInstance(15,30,java.awt.Image.SCALE_SMOOTH)));
+            bombth.setIcon(numberImageIcons[th]);
+            bombh.setIcon(numberImageIcons[h]);
+            bombt.setIcon(numberImageIcons[t]);
+            bombo.setIcon(numberImageIcons[o]);
         } catch (ArrayIndexOutOfBoundsException e) {
             System.out.println("Too many bombs");
         }
@@ -599,9 +609,9 @@ public class GUI {
     }
 
     private void updateFace(int faceType){
-        Image scaledImage = faceImages[faceType].getScaledInstance(35, 35, java.awt.Image.SCALE_SMOOTH);
-        ImageIcon image = new ImageIcon(scaledImage);
-        face.setIcon(image);
+        //Image scaledImage = faceImages[faceType].getScaledInstance(35, 35, java.awt.Image.SCALE_SMOOTH);
+        //ImageIcon image = new ImageIcon(scaledImage);
+        face.setIcon(faceImageIcons[faceType]);
     }
 
     public Engine getEngine() {
@@ -611,11 +621,8 @@ public class GUI {
     class optionListener implements ActionListener {
         private SpinnerNumberModel bombModel;
         private JSpinner bombSpinner;
-
         private JSpinner heightSpinner;
-
         private JSpinner widthSpinner;
-
         private JDialog options;
 
 
@@ -726,7 +733,6 @@ public class GUI {
             }
 
             bombSpinner = new JSpinner(bombModel);
-            //System.out.println(bombSpinner.getValue());
             options.pack();
 
         }
@@ -745,7 +751,7 @@ public class GUI {
             this.gui = newGUI; 
             position = name;
             this.setMargin(new Insets(0,0,0,0));
-            this.setBackground(new Color(192,192,192));
+            this.setBackground(new Color(180,180,180));
         }
 
         public boolean getClicked() {
