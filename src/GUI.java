@@ -35,11 +35,8 @@ public class GUI {
     private final optionListener optionButton = new optionListener();
     private final gameListener gameButton = new gameListener();
 
-    private Image[] boardImages;
     private ImageIcon[] boardImageIcons;
-    private static Image[] numberImages;
     private static ImageIcon[] numberImageIcons;
-    private Image[] faceImages;
     private ImageIcon[] faceImageIcons;
 
     private final int ImageWidth = 20;
@@ -249,9 +246,7 @@ public class GUI {
 
         GridLayout layout = new GridLayout(gridHeight, gridWidth, 0, 0);
         board.setLayout(layout);
-        board.setPreferredSize(new Dimension((ImageWidth)*gridWidth,(ImageWidth)*gridHeight));
-        //board.setMinimumSize(board.getPreferredSize());
-        //board.setMaximumSize(board.getPreferredSize());
+        board.setPreferredSize(new Dimension((ImageWidth)*gridWidth,(ImageHeight)*gridHeight));
         board.setSize(board.getPreferredSize());
         
 
@@ -312,50 +307,16 @@ public class GUI {
         
 
     private void paintButton(BoardButton button, int imageType) {
-        ImageIcon image;
-        Image scaledImage;
 
         switch (imageType) {
-            case 0 -> {
-                //scaledImage = boardImages[UNCLICKED].getScaledInstance(ImageWidth, ImageHeight, Image.SCALE_SMOOTH);
-                //image = new ImageIcon(scaledImage);
-                button.setIcon(boardImageIcons[UNCLICKED]);
-            }
-            case 1 -> {
-                //scaledImage = boardImages[FLAGGED].getScaledInstance(ImageWidth, ImageHeight, Image.SCALE_SMOOTH);
-                //image = new ImageIcon(scaledImage);
-                button.setIcon(boardImageIcons[FLAGGED]);
-            }
-            case 2 -> {
-                //scaledImage = boardImages[QUESTION].getScaledInstance(ImageWidth, ImageHeight, Image.SCALE_SMOOTH);
-                //image = new ImageIcon(scaledImage);
-                button.setIcon(boardImageIcons[QUESTION]);
-            }
-            case 3 -> {
-                //scaledImage = boardImages[CLICKED].getScaledInstance(ImageWidth, ImageHeight, Image.SCALE_SMOOTH);
-                //image = new ImageIcon(scaledImage);
-                button.setIcon(boardImageIcons[CLICKED]);
-            }
-            case 4 -> {
-                //scaledImage = boardImages[BOMB].getScaledInstance(ImageWidth, ImageHeight, Image.SCALE_SMOOTH);
-                //image = new ImageIcon(scaledImage);
-                button.setIcon(boardImageIcons[BOMB]);
-            }
-            case 5 -> {
-                //scaledImage = boardImages[BOMBCLICKED].getScaledInstance(ImageWidth, ImageHeight, Image.SCALE_SMOOTH);
-                //image = new ImageIcon(scaledImage);
-                button.setIcon(boardImageIcons[BOMBCLICKED]);
-            }
-            case 6 -> {
-                //scaledImage = boardImages[BOMBFLAGGEDWRONG].getScaledInstance(ImageWidth, ImageHeight, Image.SCALE_SMOOTH);
-                //image = new ImageIcon(scaledImage);
-                button.setIcon(boardImageIcons[BOMBFLAGGEDWRONG]);
-            }
-            case 7 -> {
-                //scaledImage = boardImages[BOMBFLAGGEDCORRECT].getScaledInstance(ImageWidth, ImageHeight, Image.SCALE_SMOOTH);
-                //image = new ImageIcon(scaledImage);
-                button.setIcon(boardImageIcons[BOMBFLAGGEDCORRECT]);
-            }
+            case 0 -> button.setIcon(boardImageIcons[UNCLICKED]);
+            case 1 -> button.setIcon(boardImageIcons[FLAGGED]);
+            case 2 -> button.setIcon(boardImageIcons[QUESTION]);
+            case 3 -> button.setIcon(boardImageIcons[CLICKED]);
+            case 4 -> button.setIcon(boardImageIcons[BOMB]);
+            case 5 -> button.setIcon(boardImageIcons[BOMBCLICKED]);
+            case 6 -> button.setIcon(boardImageIcons[BOMBFLAGGEDWRONG]);
+            case 7 -> button.setIcon(boardImageIcons[BOMBFLAGGEDCORRECT]);
             default -> button.setIcon(null);
         }
         frame.setVisible(true);
@@ -369,43 +330,41 @@ public class GUI {
         switch (numberOfBombs) {
             case 1 -> {
                 button.setText("1");
-                button.setForeground(new Color(10, 10, 10));
+                button.setForeground(new Color(0, 0, 200));
             }
             case 2 -> {
                 button.setText("2");
-                button.setForeground(new Color(10, 200, 100));
+                button.setForeground(new Color(200, 0, 0));
             }
             case 3 -> {
                 button.setText("3");
-                button.setForeground(new Color(10, 10, 200));
+                button.setForeground(new Color(0, 200, 0));
             }
             case 4 -> {
                 button.setText("4");
-                button.setForeground(new Color(10, 100, 10));
+                button.setForeground(new Color(0, 200, 200));
             }
             case 5 -> {
                 button.setText("5");
-                button.setForeground(new Color(10, 100, 10));
+                button.setForeground(new Color(200, 0, 200));
             }
             case 6 -> {
                 button.setText("6");
-                button.setForeground(new Color(200, 10, 10));
+                button.setForeground(new Color(200, 200, 0));
             }
             case 7 -> {
                 button.setText("7");
-                button.setForeground(new Color(100, 10, 10));
+                button.setForeground(new Color(130, 99, 250));
             }
             case 8 -> {
                 button.setText("8");
-                button.setForeground(new Color(70, 10, 10));
+                button.setForeground(new Color(255, 145, 0));
             }
             default -> button.setText(null);
         }
     }
 
     private void addPressedButtonAnimation(BoardButton button) {
-        //Image scaledImage = boardImages[PRESSEDBLANK].getScaledInstance(ImageWidth, ImageHeight, java.awt.Image.SCALE_SMOOTH);
-        //ImageIcon image = new ImageIcon(scaledImage);
         button.setPressedIcon(boardImageIcons[PRESSEDBLANK]);
     }
 
@@ -456,20 +415,15 @@ public class GUI {
             int y = (position - x) /gridWidth;
 
             removeActionListener(x,y);
-
         }
     }
-
-    
-
-
 
 
     //Reads in images to BufferedImages from Assets file
     private void readInImages(){
 
         //read in images for the board
-        boardImages = new Image[9];
+        Image[] boardImages = new Image[9];
         boardImageIcons = new ImageIcon[9];
         String[] boardAssets = {""};
 
@@ -479,7 +433,7 @@ public class GUI {
             System.out.println("error with board Images");
         }
 
-        for(int i = 0; i<boardImages.length; i++) {
+        for(int i = 0; i< boardImages.length; i++) {
             try{
                 assert boardAssets != null;
                 boardImages[i] = ImageIO.read(new File("src/Assests/Board/" + boardAssets[i]));
@@ -492,7 +446,7 @@ public class GUI {
 
 
         //read in images for the numbers
-        numberImages = new Image[11];
+        Image[] numberImages = new Image[11];
         numberImageIcons = new ImageIcon[11];
         String[] numberAssets = {""};
         try{
@@ -501,7 +455,7 @@ public class GUI {
             System.out.println("error with number Images");
         }
 
-        for(int i = 0; i<numberImages.length; i++) {
+        for(int i = 0; i< numberImages.length; i++) {
             try{
                 assert numberAssets != null;
                 numberImages[i] = ImageIO.read(new File("src/Assests/Information/Time/" + numberAssets[i]));
@@ -513,7 +467,7 @@ public class GUI {
         }
 
         //read in images for the face
-        faceImages = new Image[4];
+        Image[] faceImages = new Image[4];
         faceImageIcons = new ImageIcon[4];
         String[] faceAssets = {""};
         try{
@@ -522,7 +476,7 @@ public class GUI {
             System.out.println("error with face Images");
         }
 
-        for(int i = 0; i<faceImages.length; i++) {
+        for(int i = 0; i< faceImages.length; i++) {
             try{
                 assert faceAssets != null;
                 faceImages[i] = ImageIO.read(new File("src/Assests/Information/Face/" + faceAssets[i]));
@@ -609,8 +563,6 @@ public class GUI {
     }
 
     private void updateFace(int faceType){
-        //Image scaledImage = faceImages[faceType].getScaledInstance(35, 35, java.awt.Image.SCALE_SMOOTH);
-        //ImageIcon image = new ImageIcon(scaledImage);
         face.setIcon(faceImageIcons[faceType]);
     }
 
