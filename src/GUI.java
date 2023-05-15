@@ -260,23 +260,23 @@ public class GUI {
 
         buttonsArray = new BoardButton[gridWidth][gridHeight];
 
-        for (int y = 0; y<gridHeight; y++) {
-            for (int x = 0; x< gridWidth; x++) {
+        for (int position = 0; position<(gridHeight*gridWidth); position ++ ){
+            int x = position%gridWidth;
+            int y = (position - x) /gridWidth;
 
-                buttonsArray[x][y] = null;
-                buttonsArray[x][y] = new BoardButton(this, (y * gridWidth + x));
+            //buttonsArray[x][y] = null;
+            buttonsArray[x][y] = new BoardButton(this, (position));
 
-                //changes the board to a blank image
-                paintButton(buttonsArray[x][y],UNCLICKED);
+            //changes the board to a blank image
+            paintButton(buttonsArray[x][y],UNCLICKED);
 
-                addPressedButtonAnimation(buttonsArray[x][y]);
-                buttonsArray[x][y].setName(String.valueOf(y*gridWidth+x)); //Stores the position of the button in the array
-                buttonsArray[x][y].addMouseListener(gameButton);
+            addPressedButtonAnimation(buttonsArray[x][y]);
+            buttonsArray[x][y].setName(String.valueOf(position)); //Stores the position of the button in the array
+            buttonsArray[x][y].addMouseListener(gameButton);
 
-                board.add(buttonsArray[x][y]);
+            board.add(buttonsArray[x][y]);
 
-                frame.setVisible(true);
-            }
+            frame.setVisible(true);
         }
     }
 
@@ -451,10 +451,12 @@ public class GUI {
             updateFace(DEAD);
         }
 
-        for (int y = 0; y< gridHeight; y++) {
-            for (int x = 0; x<gridWidth; x++) {
-                removeActionListener(x,y);
-            }
+        for (int position = 0; position<(gridHeight*gridWidth); position ++ ){
+            int x = position%gridWidth;
+            int y = (position - x) /gridWidth;
+
+            removeActionListener(x,y);
+
         }
     }
 
@@ -724,7 +726,7 @@ public class GUI {
             }
 
             bombSpinner = new JSpinner(bombModel);
-            System.out.println(bombSpinner.getValue());
+            //System.out.println(bombSpinner.getValue());
             options.pack();
 
         }

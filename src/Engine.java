@@ -19,10 +19,11 @@ public class Engine {
 
         square = new Square[width][height];
 
-        for (int x = 0; x< width; x++) {
-            for (int y = 0; y<height; y++) {
-                square[x][y] = new Square();
-            }
+        for (int position = 0; position<(height*width); position ++ ){
+            int x = position%width;
+            int y = (position - x) /width;
+            square[x][y] = new Square();
+
         }
     }
 
@@ -48,115 +49,116 @@ public class Engine {
 
         int bombsAround;
 
-        for( int y=0; y<height; y++) {
-            for (int x = 0; x<width; x++) {
+        for (int positionLoop = 0; positionLoop<(height*width); positionLoop ++ ){
+            int x = positionLoop%width;
+            int y = (positionLoop - x) /width;
                 
-                bombsAround = 0;
+            bombsAround = 0;
 
-                if(x == 0) {
-                    if (y == 0) {
-                        for (int i = 0; i<=1 ; i++){
-                            for (int j = 0; j <= 1; j++){
-                                if (!( i == 0 && j == 0)) {
-                                    if (square[x+i][y+j].getIsBomb()){
-                                        bombsAround++;
-                                    }
-                                }
-                            }
-                        }
-                    } else if ( y == height-1) {
-                        for (int i = 0; i<=1 ; i++){
-                            for (int j = -1; j <= 0; j++){
-                                if (!( i == 0 && j == 0)) {
-                                    if (square[x+i][y+j].getIsBomb()){
-                                        bombsAround++;
-                                    }
-                                }
-                            }
-                        }
-                    } else {
-                        for (int i = 0; i<=1 ; i++){
-                            for (int j = -1; j <= 1; j++){
-                                if (!( i == 0 && j == 0)) {
-                                    if (square[x+i][y+j].getIsBomb()){
-                                        bombsAround++;
-                                    }
+            if(x == 0) {
+                if (y == 0) {
+                    for (int i = 0; i<=1 ; i++){
+                        for (int j = 0; j <= 1; j++){
+                            if (!( i == 0 && j == 0)) {
+                                if (square[x+i][y+j].getIsBomb()){
+                                    bombsAround++;
                                 }
                             }
                         }
                     }
-                } else if(x == width-1) {
-                    if (y == 0) {
-                        for (int i = -1; i<=0 ; i++){
-                            for (int j = 0; j <= 1; j++){
-                                if (!( i == 0 && j == 0)) {
-                                    if (square[x+i][y+j].getIsBomb()){
-                                        bombsAround++;
-                                    }
-                                }
-                            }
-                        }
-                    } else if (y == height-1) {
-                        for (int i = -1; i<=0 ; i++){
-                            for (int j = -1; j <= 0; j++){
-                                if (!( i == 0 && j == 0)) {
-                                    if (square[x+i][y+j].getIsBomb()){
-                                        bombsAround++;
-                                    }
-                                }
-                            }
-                        }
-                    } else {
-                        for (int i = -1; i<=0 ; i++){
-                            for (int j = -1; j <= 1; j++){
-                                if (!( i == 0 && j == 0)) {
-                                    if (square[x+i][y+j].getIsBomb()){
-                                        bombsAround++;
-                                    }
+                } else if ( y == height-1) {
+                    for (int i = 0; i<=1 ; i++){
+                        for (int j = -1; j <= 0; j++){
+                            if (!( i == 0 && j == 0)) {
+                                if (square[x+i][y+j].getIsBomb()){
+                                    bombsAround++;
                                 }
                             }
                         }
                     }
                 } else {
-                    if (y == 0) {
-                        for (int i = -1; i<=1 ; i++){
-                            for (int j = 0; j <= 1; j++){
-                                if (!( i == 0 && j == 0)) {
-                                    if (square[x+i][y+j].getIsBomb()){
-                                        bombsAround++;
-                                    }
-                                }
-                            }
-                        }
-                    } else if (y == height-1) {
-                        for (int i = -1; i<=1 ; i++){
-                            for (int j = -1; j <= 0; j++){
-                                if (!( i == 0 && j == 0)) {
-                                    if (square[x+i][y+j].getIsBomb()){
-                                        bombsAround++;
-                                    }
-                                }
-                            }
-                        }
-    
-                    } else {
-                        //can check all 8
-                        for (int i = -1; i<=1 ; i++){
-                            for (int j = -1; j <= 1; j++){
-                                if (!( i == 0 && j == 0)) {
-                                    if (square[x+i][y+j].getIsBomb()){
-                                        bombsAround++;
-                                    }
+                    for (int i = 0; i<=1 ; i++){
+                        for (int j = -1; j <= 1; j++){
+                            if (!( i == 0 && j == 0)) {
+                                if (square[x+i][y+j].getIsBomb()){
+                                    bombsAround++;
                                 }
                             }
                         }
                     }
                 }
+            } else if(x == width-1) {
+                if (y == 0) {
+                    for (int i = -1; i<=0 ; i++){
+                        for (int j = 0; j <= 1; j++){
+                            if (!( i == 0 && j == 0)) {
+                                if (square[x+i][y+j].getIsBomb()){
+                                    bombsAround++;
+                                }
+                            }
+                        }
+                    }
+                } else if (y == height-1) {
+                    for (int i = -1; i<=0 ; i++){
+                        for (int j = -1; j <= 0; j++){
+                            if (!( i == 0 && j == 0)) {
+                                if (square[x+i][y+j].getIsBomb()){
+                                    bombsAround++;
+                                }
+                            }
+                        }
+                    }
+                } else {
+                    for (int i = -1; i<=0 ; i++){
+                        for (int j = -1; j <= 1; j++){
+                            if (!( i == 0 && j == 0)) {
+                                if (square[x+i][y+j].getIsBomb()){
+                                    bombsAround++;
+                                }
+                            }
+                        }
+                    }
+                }
+            } else {
+                if (y == 0) {
+                    for (int i = -1; i<=1 ; i++){
+                        for (int j = 0; j <= 1; j++){
+                            if (!( i == 0 && j == 0)) {
+                                if (square[x+i][y+j].getIsBomb()){
+                                    bombsAround++;
+                                }
+                            }
+                        }
+                    }
+                } else if (y == height-1) {
+                    for (int i = -1; i<=1 ; i++){
+                        for (int j = -1; j <= 0; j++){
+                            if (!( i == 0 && j == 0)) {
+                                if (square[x+i][y+j].getIsBomb()){
+                                    bombsAround++;
+                                }
+                            }
+                        }
+                    }
 
-                square[x][y].updateNumBombsAround(bombsAround);
+                } else {
+                    //can check all 8
+                    for (int i = -1; i<=1 ; i++){
+                        for (int j = -1; j <= 1; j++){
+                            if (!( i == 0 && j == 0)) {
+                                if (square[x+i][y+j].getIsBomb()){
+                                    bombsAround++;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            square[x][y].updateNumBombsAround(bombsAround);
 
                 
-            }
+
         }
 
         //place all the bombs in a random position
@@ -295,16 +297,16 @@ public class Engine {
     public boolean checkWin() {
 
 
-        for( int y=0; y<height; y++) {
-            for (int x = 0; x<width; x++) {
+        for (int positionLoop = 0; positionLoop<(height*width); positionLoop ++ ){
+            int x = positionLoop%width;
+            int y = (positionLoop - x) /width;
                 //if there is a square that is not a bomb and has not been revealed then the game is not over
 
 
-                if (!(square[x][y].getIsBomb())){
-                    if (!(square[x][y].getRevealed())){
-                        return false;
-                    }
-                }           
+            if (!(square[x][y].getIsBomb())) {
+                if (!(square[x][y].getRevealed())) {
+                    return false;
+                }
             }
         }
 
@@ -313,26 +315,26 @@ public class Engine {
 
     // end the game revealing all the bombs
     public void gameOver(int x, int y){
-        for( int j=0; j<height; j++) {
-            for (int i = 0; i<width; i++) {
+        for (int positionLoop = 0; positionLoop<(height*width); positionLoop ++ ){
+            int i = positionLoop%width;
+            int j = (positionLoop - x) /width;
 
-                Square placeholder = square[i][j];
+            Square placeholder = square[i][j];
 
-                if(!placeholder.getRevealed()){
-                    if(placeholder.getIsBomb()){
-                        if(placeholder.getFlagged()){
-                            //need to show that it was correctly flagged
-                            gui.updatePaintedSquare(i, j, gui.BOMBFLAGGEDCORRECT);
-                        } else {
-                            //need to show that there was a bomb there
-                            gui.updatePaintedSquare(i, j, gui.BOMB);
-                        }
-                    } else if(placeholder.getFlagged()) {
-                        // need to show that it was incorrectly flagged
-                        gui.updatePaintedSquare(i, j, gui.BOMBFLAGGEDWRONG);
+            if(!placeholder.getRevealed()){
+                if(placeholder.getIsBomb()){
+                    if(placeholder.getFlagged()){
+                        //need to show that it was correctly flagged
+                        gui.updatePaintedSquare(i, j, gui.BOMBFLAGGEDCORRECT);
+                    } else {
+                        //need to show that there was a bomb there
+                        gui.updatePaintedSquare(i, j, gui.BOMB);
                     }
-                    //otherwise leave as was
+                } else if(placeholder.getFlagged()) {
+                    // need to show that it was incorrectly flagged
+                    gui.updatePaintedSquare(i, j, gui.BOMBFLAGGEDWRONG);
                 }
+                //otherwise leave as was
             }
         }
 
