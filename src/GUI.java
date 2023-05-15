@@ -428,7 +428,7 @@ public class GUI {
         String[] boardAssets = {""};
 
         try{
-            boardAssets = (new File("src/Assests/Board")).list();
+            boardAssets = (new File("src/Assets/Board")).list();
         } catch (NullPointerException e) {
             System.out.println("error with board Images");
         }
@@ -436,7 +436,7 @@ public class GUI {
         for(int i = 0; i< boardImages.length; i++) {
             try{
                 assert boardAssets != null;
-                boardImages[i] = ImageIO.read(new File("src/Assests/Board/" + boardAssets[i]));
+                boardImages[i] = ImageIO.read(new File("src/Assets/Board/" + boardAssets[i]));
                 Image scaledImage = boardImages[i].getScaledInstance(ImageWidth, ImageHeight, Image.SCALE_SMOOTH);
                 boardImageIcons[i] = new ImageIcon(scaledImage);
             } catch (IOException e) {
@@ -450,7 +450,7 @@ public class GUI {
         numberImageIcons = new ImageIcon[11];
         String[] numberAssets = {""};
         try{
-            numberAssets = (new File("src/Assests/Information/Time")).list();
+            numberAssets = (new File("src/Assets/Information/Time")).list();
         } catch (NullPointerException e) {
             System.out.println("error with number Images");
         }
@@ -458,7 +458,7 @@ public class GUI {
         for(int i = 0; i< numberImages.length; i++) {
             try{
                 assert numberAssets != null;
-                numberImages[i] = ImageIO.read(new File("src/Assests/Information/Time/" + numberAssets[i]));
+                numberImages[i] = ImageIO.read(new File("src/Assets/Information/Time/" + numberAssets[i]));
                 Image scaledImage = numberImages[i].getScaledInstance(15,30 , Image.SCALE_SMOOTH);
                 numberImageIcons[i] = new ImageIcon(scaledImage);
             } catch (IOException e) {
@@ -471,7 +471,7 @@ public class GUI {
         faceImageIcons = new ImageIcon[4];
         String[] faceAssets = {""};
         try{
-            faceAssets = (new File("src/Assests/Information/Face")).list();
+            faceAssets = (new File("src/Assets/Information/Face")).list();
         } catch (NullPointerException e) {
             System.out.println("error with face Images");
         }
@@ -479,7 +479,7 @@ public class GUI {
         for(int i = 0; i< faceImages.length; i++) {
             try{
                 assert faceAssets != null;
-                faceImages[i] = ImageIO.read(new File("src/Assests/Information/Face/" + faceAssets[i]));
+                faceImages[i] = ImageIO.read(new File("src/Assets/Information/Face/" + faceAssets[i]));
                 Image scaledImage = faceImages[i].getScaledInstance(35, 35, Image.SCALE_SMOOTH);
                 faceImageIcons[i] = new ImageIcon(scaledImage);
             } catch (IOException e) {
