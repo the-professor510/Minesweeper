@@ -9,5 +9,3 @@ If using javac first ensure that you have download the src and bin folders, then
 >    cd .\bin\ <br>
 >    java App <br>
 
-
-<br>
