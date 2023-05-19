@@ -22,11 +22,11 @@ public class GUI {
 
     private BoardButton[][] buttonsArray;
 
-    private int gridWidth = 15;
-    private int gridHeight = 10;
+    private int gridWidth = 12;
+    private int gridHeight = 12;
 
-    private int numBombs = 10;
-    private int flags = 9;
+    private int numBombs = 15;
+    private int flags = 15;
 
     private final JPanel gameInformation = new JPanel();
     private final JPanel board = new JPanel();
